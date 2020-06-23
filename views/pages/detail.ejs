@@ -5,7 +5,22 @@
   </header>
   <h1><%=show.title%></h1>
   <p><%=show.overview%></p>
+  <p><%=show.genres%></p>
+  <p><%=show.rating%></p>
+  <p><%=show.year%></p>
+  <p><%=show.available_translations%></p>
   <img src="<%= show.image_url %>"/>
+  <form action="/collection" method="POST">
+    <input type="hidden" value="<%=show.title%>" name="title" />
+    <input type="hidden" value="<%=show.overview%>" name="overview" />
+    <input type="hidden" value="<%=show.genres%>" name="genres" />
+    <input type="hidden" value="<%=show.rating%>" name="rating" />
+    <input type="hidden" value="<%=show.year%>" name="year" />
+    <input type="hidden" value="<%=show.available_translations%>" name="available_translations" />
+    <input type="hidden" value="<%=show.image_url%>" name="image_url" />
+    <input type="hidden" value="<%=show.tmdbId%>" name="tmdbId" />
+    <button>Add to Collection</button>
+  </form>
   <footer><%- include ('../partials/footer.ejs') %></footer>
 </body>
 </html>
