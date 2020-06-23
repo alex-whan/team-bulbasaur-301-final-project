@@ -38,7 +38,6 @@ app.use(methodOverride('_method'));
 const client = new pg.Client(process.env.DATABASE_URL);
 client.on('error', err => console.log(err));
 
-
 // Initialize port
 const PORT = process.env.PORT || 3001;
 
@@ -59,7 +58,8 @@ app.get('/details', showDetails);
 app.post('/collection', addShowToCollection);
 
 // Delete show from collection route
-// app.delete();
+
+// app.delete('');
 
 // 404 error route
 app.use('*', notFound);
@@ -129,7 +129,7 @@ function showDetails(req, res) {
 
 // Add show to collection handler
 function addShowToCollection(req, res){
-  let {title, overview} = request.body;
+  let {title, overview} = req.body;
   let sql = 'INSERT INTO series (title, overview) VALUES ($1, $2) RETURNING id;';
   let safeValues = [title, overview];
 
