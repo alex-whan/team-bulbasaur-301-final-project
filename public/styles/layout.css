@@ -1,5 +1,5 @@
 #headerImg{
-  background-image: url("../../assets/images/header.png");
+  background: url(../../assets/images/header.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -10,6 +10,8 @@
   display:flex;
   justify-content: flex-start;
   flex-direction: row;
+  font-size: 12px;
+  font-family: 'Jost', sans-serif;
 }
 
 #navBar>li{
@@ -32,14 +34,16 @@ input{
 }
 
 footer{
+  /* background-color: rgb(126, 126, 126); */
   position: fixed;
   bottom: 0;
-  left: 0; 
+  left: 0;  
   width: 100%;
-  background-color: rgb(126, 126, 126);
   height: 70px;
-  align-content: space-between;
-}
+  /* align-content: space-between; */
+  display: flex;
+  justify-content: space-around;
+
 
 @media screen and (min-width: 481px){
 

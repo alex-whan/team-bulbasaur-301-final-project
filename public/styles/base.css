@@ -1,4 +1,5 @@
 * {
+  font-family: 'Jost', sans-serif;
   background-color: rgb(29, 27, 27);
   color: aliceblue;
 }
@@ -7,15 +8,29 @@ main{
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
 }
-
 
 button{
   background-color: rgb(133, 133, 133);
-  flex-direction: column;
   border-radius: 5px;
+  justify-self: center;
 }
 
 h1 {
-  color: green;
+  color: rgb(255, 255, 255);
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 55px;
+  text-align: center;
+  margin-top: 2em ;
+  
 }
+h4{
+  font-family: 'Jost', sans-serif;
+  text-align: center;
+  font-size: 25px;
+  margin: 15%;
+  
+}
+/* font ready to be used for anything */
+/* font-family: 'Alegreya SC', serif; */
