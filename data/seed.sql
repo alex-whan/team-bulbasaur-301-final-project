@@ -1,0 +1,1 @@
+INSERT INTO series (title, description, img_url) VALUES ('Lost', 'This is our test description for Lost.', 'https://i.imgur.com/J5LVHEL.jpg');
