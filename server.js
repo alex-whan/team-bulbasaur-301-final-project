@@ -59,7 +59,7 @@ app.get('/details', showDetails);
 app.post('/collection', addShowToCollection);
 
 // Delete show from collection route
-app.delete();
+// app.delete();
 
 // 404 error route
 app.use('*', notFound);
