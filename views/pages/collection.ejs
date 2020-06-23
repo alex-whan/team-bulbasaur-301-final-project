@@ -1,0 +1,23 @@
+<%- include ('../partials/head.ejs') %>
+<body>
+  <header>
+    <%- include ('../partials/header.ejs') %>
+  </header>
+  <h1>Your collection</h1>
+  <% favoritesArray.forEach(series => { %>
+  <section>
+    <h2><%=series.title%></h2>
+    <p><%=series.overview%></p>
+    <p><%=series.genres%></p>
+    <p><%=series.rating%></p>
+    <p><%=series.year%></p>
+    <p><%=series.available_translations%></p>
+    <img src="<%= series.image_url %>"/>
+    <form action='/collection<%= series.id %>?_method=DELETE' method='POST'>
+     <button>Remove from collection</button> 
+    </form>
+  </section>
+  <% }) %>
+  <footer><%- include ('../partials/footer.ejs') %></footer>
+</body>
+</html>
