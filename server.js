@@ -50,13 +50,16 @@ app.get('/', goHome);
 app.get('/search', renderSearchPage);
 
 // New search route
-app.get('/search/new', searchShows)
+app.get('/search/new', searchShows);
 
 // Show details route
-app.get('/details', showDetails)
+app.get('/details', showDetails);
 
 // Add show to collection route
 app.post('/collection', addShowToCollection);
+
+// Delete show from collection route
+app.delete();
 
 // 404 error route
 app.use('*', notFound);
