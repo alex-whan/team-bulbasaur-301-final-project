@@ -1,7 +1,7 @@
 'use strict';
 
 
-// Libraries
+// Libraries and Dependencies
 const express = require('express');
 const pg = require('pg');
 const superagent = require('superagent');
@@ -10,8 +10,8 @@ require('dotenv').config();
 const app = express();
 const cors = require('cors');
 const methodOverride = require('method-override');
-
 const unirest = require('unirest');
+
 // Trakt Set Up
 const Trakt = require('trakt.tv');
 let options = {
@@ -33,26 +33,34 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
 
-
-
+// Turn on/establish client
 const client = new pg.Client(process.env.DATABASE_URL);
 client.on('error', err => console.log(err));
 
 const PORT = process.env.PORT || 3001;
 
+// Routes
+// Home route
 app.get('/', goHome);
+// Search results route
 app.get('/search', renderSearch);
+
+// New search route
 app.get('/search/new', searchShows)
 app.get('/details', showDetails)
 
+
+// Home route handler
 function goHome(req, res) {
   res.status(200).render('pages/index.ejs');
 }
 
+// Search results handler
 function renderSearch(req, res) {
   res.status(200).render('pages/search.ejs');
 }
 
+// New search handler
 function searchShows(req, res) {
   let query = req.query.search;
   // uTellyCall('tt3398228');
@@ -70,6 +78,7 @@ function searchShows(req, res) {
   })
 }
 
+// Show details handler
 function showDetails(req, res) {
   const id = req.query.id;
   console.log(id);
@@ -107,7 +116,7 @@ function showDetails(req, res) {
 
 
 
-
+// uTelly API call
 function uTellyCall(query) {
   let req = unirest('GET', 'https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup');
   req.query({
@@ -135,12 +144,13 @@ function uTellyCall(query) {
   });
 }
 
+// Show/series Constructor
 function Show(obj) {
   this.title = obj.title;
   this.overview = obj.overview;
 }
 
-
+// Turn on client and turn on server if client connects
 client.connect()
   .then(() => {
     app.listen(PORT, () => console.log(`Listening on ${PORT}`));
