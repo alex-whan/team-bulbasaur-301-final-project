@@ -54,6 +54,9 @@ app.get('/search/new', searchShows);
 // Show details route
 app.get('/details', showDetails);
 
+// aboutUs route
+app.get('/aboutUs', aboutUs);
+
 // Add show to collection route
 app.post('/collection', addShowToCollection);
 
@@ -72,6 +75,11 @@ function goHome(req, res) {
 // Search page handler
 function renderSearchPage(req, res) {
   res.status(200).render('pages/search.ejs');
+}
+
+// About Us page handler
+function aboutUs(req, res){
+  res.status(200).render('pages/aboutUs.ejs');
 }
 
 // Get search results handler

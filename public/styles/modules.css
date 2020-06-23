@@ -3,3 +3,45 @@
 	flex-direction: column;
 	justify-content: center;
 }
+
+.aboutUsImg{
+	border-radius: 10px;
+	height: 200px;
+}
+
+.aboutUs{
+	max-width: 760px;
+	border: solid 2px grey;
+	border-radius: 15px;
+	padding: 15px;
+	margin-bottom: 25px;
+}
+
+h2.aboutUsName{
+	font-family: 'Alegreya SC', serif;
+	font-size: 25px;
+}
+
+.displayImg{
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+}
+
+.title{
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+}
+
+.AboutUsDescription{
+	padding: 5%;
+}
+
+.socialIcons a{
+	margin-left: 15px;
+}
+
+.aboutUs:last-of-type{
+	margin-bottom: 200px;
+}
