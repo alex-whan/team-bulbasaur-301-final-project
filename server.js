@@ -45,28 +45,33 @@ const PORT = process.env.PORT || 3001;
 // Routes
 // Home route
 app.get('/', goHome);
+
 // Search results route
-app.get('/search', renderSearch);
+app.get('/search', renderSearchPage);
 
 // New search route
 app.get('/search/new', searchShows)
+
+// Show details route
 app.get('/details', showDetails)
+
+// Add show to collection route
+app.post('/collection', addShowToCollection);
 
 // 404 error route
 app.use('*', notFound);
-
 
 // Home route handler
 function goHome(req, res) {
   res.status(200).render('pages/index.ejs');
 }
 
-// Search results handler
-function renderSearch(req, res) {
+// Search page handler
+function renderSearchPage(req, res) {
   res.status(200).render('pages/search.ejs');
 }
 
-// New search handler
+// Get search results handler
 function searchShows(req, res) {
   let query = req.query.search;
   // uTellyCall('tt3398228');
@@ -80,7 +85,12 @@ function searchShows(req, res) {
     // console.log('trakt imdb', response.data[0].show.ids.imdb);
     // use this to get tv show length
     let responseArray = response.data;
-    res.status(200).render('pages/results.ejs', { shows: responseArray });
+    console.log('RESPONSE DAAAAATA: ', response.data[0])
+    const finalShowArray = responseArray.map(series => {
+      return new Show(series.show);
+    })
+    console.log('FRONT END DATA HERE: ', finalShowArray);
+    res.status(200).render('pages/results.ejs', { shows: finalShowArray });
   })
 }
 
@@ -94,7 +104,7 @@ function showDetails(req, res) {
     extended: 'full'
   }).then(response => {
     let showData = new Show(response.data);
-    console.log('show data', showData);
+    console.log('SHOW DATA HERE: ', showData);
     res.status(200).render('pages/detail.ejs', { show: showData })
     // response.data.title;
     // let overview = response.data.overview;
@@ -102,11 +112,35 @@ function showDetails(req, res) {
     // reponse.data.genres (array)
     // response.data.translations (array)
     // response.data.year
-    console.log(response.data);
+    // console.log(response.data);
   }).catch(err => console.log(err));
 }
 
+// Add show to collection handler
+function addShowToCollection(req, res){
+  let {title, overview} = request.body;
+  let sql = 'INSERT INTO series (title, overview) VALUES ($1, $2) RETURNING id;';
+  let safeValues = [title, overview];
 
+  client.query(sql, safeValues)
+    .then(sqlResults => {
+      let id = sqlResults.rows[0].id;
+      response.status(200);
+    })
+}
+
+// Delete show from collection handler
+function deleteShowFromCollection(req, res){
+  let showId = request.params.id;
+
+  let sql = 'DELETE FROM series WHERE id=$1;';
+  let safeVales = [bookId];
+
+  client.query(sql, safeVales)
+    .then(() => {
+      response.redirect('/');
+    });
+}
 
 //   trakt.episodes.summary({
 //     // loop through all episodes
@@ -152,8 +186,8 @@ function uTellyCall(query) {
 
 // Show/series Constructor
 function Show(obj) {
-  this.title = obj.title;
-  this.overview = obj.overview;
+  this.title = obj.title ? obj.title : 'No title available.';
+  this.overview = obj.overview ? obj.overview : 'No overview available.';
 }
 
 // 404 Not Found error handler
