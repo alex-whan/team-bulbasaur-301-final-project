@@ -1,7 +1,11 @@
 <%- include ('../partials/head.ejs') %>
 <body>
+  <header>
+    <%- include ('../partials/header.ejs') %>
+  </header>
   <h1><%=show.title%></h1>
   <p><%=show.overview%></p>
   <img src="<%= show.image_url %>"/>
+  <footer><%- include ('../partials/footer.ejs') %></footer>
 </body>
 </html>

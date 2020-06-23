@@ -1,5 +1,8 @@
 <%- include ('../partials/head.ejs') %>
 <body>
+  <header>
+    <%- include ('../partials/header.ejs') %>
+  </header>
   <% shows.forEach(show => { %>
    <%#if (show.show) { %>
     <form action="/details" method="GET">
@@ -11,5 +14,6 @@
     </form>
   <%# } %>
   <% }) %>
+  <footer><%- include ('../partials/footer.ejs') %></footer>
 </body>
 </html>
