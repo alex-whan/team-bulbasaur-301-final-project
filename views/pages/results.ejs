@@ -1,5 +1,8 @@
 <%- include ('../partials/head.ejs') %>
 <body>
+  <header>
+    <%- include ('../partials/header.ejs') %>
+  </header>
   <% shows.forEach(show => { %>
     <form action="/details" method="GET">
     <p><%= show.show.title %></p>

@@ -1,3 +1,21 @@
+* {
+  background-color: rgb(29, 27, 27);
+  color: aliceblue;
+}
+
+main{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+button{
+  background-color: rgb(133, 133, 133);
+  flex-direction: column;
+  border-radius: 5px;
+}
+
 h1 {
   color: green;
 }
