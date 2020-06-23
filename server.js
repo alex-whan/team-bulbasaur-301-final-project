@@ -55,7 +55,7 @@ app.get('/search/new', searchShows);
 app.get('/details', showDetails);
 
 // Add show to collection route
-// app.post('/collection', addShowToCollection);
+app.post('/collection', addShowToCollection);
 
 // Delete show from collection route
 
@@ -104,41 +104,45 @@ function searchShows(req, res) {
 
 // Show details handler
 function showDetails(req, res) {
-  const id = req.query.id;
+  const tmdbId = req.query.id;
   const image_url = req.query.image_url;
-  console.log(req.query);
+  // console.log(req.query);
   trakt.search.id({
-    id: id,
+    id: tmdbId,
     id_type: 'tmdb',
     extended: 'full',
     type: 'show'
   }).then(response => {
-    // console.log('THIS IS OUR RESPONSE DATA: ', response.data);
-    let showData = new Show(response.data[0], image_url);
-    // console.log('show data', showData);
+    console.log('THIS IS OUR RESPONSE DATA: ', (response.data[0].show));
+    let showData = new Show(response.data[0].show, image_url, tmdbId);
+    console.log('constructed show', showData);
     res.status(200).render('pages/detail.ejs', { show: showData })
-    // response.data.title;
-    // let overview = response.data.overview;
-    // response.data.ratings
-    // response.data.genres (array)
-    // response.data.translations (array)
-    // response.data.year
-    // console.log(response.data);
-  }).catch(() => {
+  }).catch((err) => {
+    console.log(err);
     res.status(200).render('pages/error.ejs')
   });
 }
 
+
+// this.title = obj.title ? obj.title : 'No title available.';
+//   this.overview = obj.overview ? obj.overview : 'No overview available.';
+//   this.image_url = img ? img : 'Image not available.';
+//   this.genres = obj.genres.join(', ') ? obj.genres.join(', ') : 'Genres not available';
+//   this.rating = obj.rating ? obj.rating : 'Rating not available';
+//   this.available_translations = obj.available_translations.join(', ') ? obj.available_translations.join(', ') : 'Genres not available';
+//   this.year = obj.year ? obj.year : 'Year not available';
+  // this.id = id;
+
 // Add show to collection handler
 function addShowToCollection(req, res){
-  let {title, overview} = req.body;
-  let sql = 'INSERT INTO series (title, overview) VALUES ($1, $2) RETURNING id;';
-  let safeValues = [title, overview];
+  let {title, overview, image_url, genres, rating, available_translations, year, tmdbId} = req.body;
+  let sql = 'INSERT INTO series (title, overview, image_url, genres, rating, available_translations, year, tmdbId) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;';
+  let safeValues = [title, overview, image_url, genres, rating, available_translations, year, tmdbId];
 
   client.query(sql, safeValues)
     .then(sqlResults => {
       let id = sqlResults.rows[0].id;
-      res.status(200);
+      res.status(200).redirect(`/collection/${id}`);
     })
 }
 
@@ -195,10 +199,15 @@ function uTellyCall(query) {
   });
 }
 
-function Show(obj, img) {
-  this.title = obj.show.title ? obj.show.title : 'No title available.';
-  this.overview = obj.show.overview ? obj.show.overview : 'No overview available.';
+function Show(obj, img, tmdbId) {
+  this.title = obj.title ? obj.title : 'No title available.';
+  this.overview = obj.overview ? obj.overview : 'No overview available.';
   this.image_url = img ? img : 'Image not available.';
+  this.genres = obj.genres.join(', ') ? obj.genres.join(', ') : 'Genres not available';
+  this.rating = obj.rating ? obj.rating : 'Rating not available';
+  this.available_translations = obj.available_translations.join(', ') ? obj.available_translations.join(', ') : 'Genres not available';
+  this.year = obj.year ? obj.year : 'Year not available';
+  this.tmdbId = tmdbId;
 }
 
 // 404 Not Found error handler
