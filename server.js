@@ -55,7 +55,7 @@ app.get('/search/new', searchShows);
 app.get('/details', showDetails);
 
 // Add show to collection route
-app.post('/collection', addShowToCollection);
+// app.post('/collection', addShowToCollection);
 
 // Delete show from collection route
 
@@ -84,7 +84,7 @@ function searchShows(req, res) {
   }
   superagent.get(url, queryParams)
     .then(results => {
-      console.log('tmdb', results.body);
+      console.log('THIS IS OUR TMDB: ', results.body);
       let responseArray = results.body.results;
       res.status(200).render('pages/results.ejs', { shows: responseArray });
     }).catch(err => console.log(err));
@@ -113,18 +113,20 @@ function showDetails(req, res) {
     extended: 'full',
     type: 'show'
   }).then(response => {
-    console.log(response.data)
+    // console.log('THIS IS OUR RESPONSE DATA: ', response.data);
     let showData = new Show(response.data[0], image_url);
     // console.log('show data', showData);
     res.status(200).render('pages/detail.ejs', { show: showData })
     // response.data.title;
     // let overview = response.data.overview;
     // response.data.ratings
-    // reponse.data.genres (array)
+    // response.data.genres (array)
     // response.data.translations (array)
     // response.data.year
     // console.log(response.data);
-  }).catch(err => console.log(err));
+  }).catch(() => {
+    res.status(200).render('pages/error.ejs')
+  });
 }
 
 // Add show to collection handler
@@ -136,7 +138,7 @@ function addShowToCollection(req, res){
   client.query(sql, safeValues)
     .then(sqlResults => {
       let id = sqlResults.rows[0].id;
-      response.status(200);
+      res.status(200);
     })
 }
 
@@ -149,7 +151,7 @@ function deleteShowFromCollection(req, res){
 
   client.query(sql, safeVales)
     .then(() => {
-      response.redirect('/');
+      res.redirect('/');
     });
 }
 
@@ -196,12 +198,12 @@ function uTellyCall(query) {
 function Show(obj, img) {
   this.title = obj.show.title ? obj.show.title : 'No title available.';
   this.overview = obj.show.overview ? obj.show.overview : 'No overview available.';
-  this.image_url = img ? img : 'No image available.';
+  this.image_url = img ? img : 'Image not available.';
 }
 
 // 404 Not Found error handler
 function notFound(req, res){
-  response.status(404).send('Sorry, this route does not exist.');
+  res.status(404).send('Sorry, this route does not exist.');
 }
 
 // Turn on client and turn on server if client connects
