@@ -1,0 +1,12 @@
+<%- include ('../partials/head.ejs') %>
+<body>
+  <% shows.forEach(show => { %>
+    <form action="/details" method="GET">
+    <p><%= show.show.title %></p>
+    <input type="hidden" value="<%=show.show.ids.imdb%>" name="id" />
+    <button>See Details</button>
+    </form>
+
+  <% }) %>
+</body>
+</html>
