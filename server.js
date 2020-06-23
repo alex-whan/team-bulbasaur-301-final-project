@@ -60,6 +60,9 @@ app.get('/aboutUs', aboutUs);
 // Add show to collection route
 app.post('/collection', addShowToCollection);
 
+// collection page route
+app.get('/collection', collectionPage);
+
 // Delete show from collection route
 
 // app.delete('');
@@ -92,7 +95,7 @@ function searchShows(req, res) {
   }
   superagent.get(url, queryParams)
     .then(results => {
-      console.log('THIS IS OUR TMDB: ', results.body);
+      // console.log('THIS IS OUR TMDB: ', results.body);
       let responseArray = results.body.results;
       res.status(200).render('pages/results.ejs', { shows: responseArray });
     }).catch(err => console.log(err));
@@ -139,19 +142,39 @@ function showDetails(req, res) {
 //   this.rating = obj.rating ? obj.rating : 'Rating not available';
 //   this.available_translations = obj.available_translations.join(', ') ? obj.available_translations.join(', ') : 'Genres not available';
 //   this.year = obj.year ? obj.year : 'Year not available';
-  // this.id = id;
+// this.id = id;
 
 // Add show to collection handler
 function addShowToCollection(req, res){
-  let {title, overview, image_url, genres, rating, available_translations, year, tmdbId} = req.body;
-  let sql = 'INSERT INTO series (title, overview, image_url, genres, rating, available_translations, year, tmdbId) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;';
-  let safeValues = [title, overview, image_url, genres, rating, available_translations, year, tmdbId];
+  let idCheck = 'SELECT * FROM series WHERE tmdbId=$1;';
+  let idSafeValue = [req.body.tmdbId];
+  console.log('We are in the addShowFunction');
+  client.query(idCheck, idSafeValue)
+    .then(idResults =>{
+      if (!idResults.rowCount){
+        console.log( 'this is my id Results', idResults.rowCount)
+        let {title, overview, image_url, genres, rating, available_translations, year, tmdbId} = req.body;
+        let sql = 'INSERT INTO series (title, overview, image_url, genres, rating, available_translations, year, tmdbId) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);';
+        let safeValues = [title, overview, image_url, genres, rating, available_translations, year, tmdbId];
 
-  client.query(sql, safeValues)
-    .then(sqlResults => {
-      let id = sqlResults.rows[0].id;
-      res.status(200).redirect(`/collection/${id}`);
-    })
+        client.query(sql, safeValues)
+          // .then(sqlResults => {
+            // let id = sqlResults.rows[0].id;
+            // res.status(200).redirect('');
+            // res.status(200).redirect(`/collection/${id}`);
+          // }).catch(error => console.log(error))
+      }
+    }).catch(error => console.log(error))
+}
+
+// collection Page
+function collectionPage(req, res){
+  let sql = 'SELECT * FROM series;';
+  client.query(sql)
+    .then(sqlResults =>{
+      console.log(' this is my sqlResults', sqlResults.rows);
+      response.status(200).render('pages/collection.ejs', {favoritesArray: sqlResults.rows });
+    }).catch(error => console.log(error))
 }
 
 // Delete show from collection handler
