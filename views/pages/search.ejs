@@ -1,11 +1,14 @@
 <%- include ('../partials/head.ejs') %>
 <body>
-  <header></header>
+  <header>
+    <%- include ('../partials/header.ejs') %>
+  </header>
   <main>
     <form action="/search/new" method="GET">
       <input type="text" name="search" placeholder="Enter a TV show"/>
       <button type="submit">Submit</button>
     </form>
   </main>
+  <footer><%- include ('../partials/footer.ejs') %></footer>
 </body>
 </html>
