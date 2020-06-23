@@ -34,6 +34,7 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 app.use(methodOverride('_method'));
 
+
 // Turn on/establish client
 const client = new pg.Client(process.env.DATABASE_URL);
 client.on('error', err => console.log(err));
@@ -61,8 +62,7 @@ app.get('/aboutUs', aboutUs);
 app.post('/collection', addShowToCollection);
 
 // Delete show from collection route
-
-// app.delete('');
+app.delete('/collection/:id', deleteShowFromCollection);
 
 // 404 error route
 app.use('*', notFound);
@@ -159,11 +159,11 @@ function deleteShowFromCollection(req, res){
   let showId = request.params.id;
 
   let sql = 'DELETE FROM series WHERE id=$1;';
-  let safeVales = [bookId];
+  let safeVales = [showId];
 
   client.query(sql, safeVales)
     .then(() => {
-      res.redirect('/');
+      res.redirect('/collection');
     });
 }
 
