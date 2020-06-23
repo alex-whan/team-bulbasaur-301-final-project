@@ -1,6 +1,5 @@
 'use strict';
 
-
 // Libraries and Dependencies
 const express = require('express');
 const pg = require('pg');
@@ -14,6 +13,7 @@ const unirest = require('unirest');
 
 // Trakt Set Up
 const Trakt = require('trakt.tv');
+const { response } = require('express');
 let options = {
   client_id: process.env.TRAKT_ID,
   client_secret: process.env.TRAKT_SECRET,
@@ -24,6 +24,7 @@ let options = {
   debug: true,
   limit: 15
 };
+
 const trakt = new Trakt(options);
 
 // Middleware
@@ -37,6 +38,8 @@ app.use(methodOverride('_method'));
 const client = new pg.Client(process.env.DATABASE_URL);
 client.on('error', err => console.log(err));
 
+
+// Initialize port
 const PORT = process.env.PORT || 3001;
 
 // Routes
@@ -48,6 +51,9 @@ app.get('/search', renderSearch);
 // New search route
 app.get('/search/new', searchShows)
 app.get('/details', showDetails)
+
+// 404 error route
+app.use('*', notFound);
 
 
 // Home route handler
@@ -148,6 +154,11 @@ function uTellyCall(query) {
 function Show(obj) {
   this.title = obj.title;
   this.overview = obj.overview;
+}
+
+// 404 Not Found error handler
+function notFound(req, res){
+  response.status(404).send('Sorry, this route does not exist.');
 }
 
 // Turn on client and turn on server if client connects
