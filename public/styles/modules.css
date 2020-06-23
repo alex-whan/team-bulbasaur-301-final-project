@@ -9,7 +9,7 @@
 	height: 200px;
 }
 
-.aboutUs1, .aboutUs2{
+.aboutUs{
 	max-width: 760px;
 	border: solid 2px grey;
 	border-radius: 15px;
@@ -31,5 +31,17 @@ h2.aboutUsName{
 .title{
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: center;
+}
+
+.AboutUsDescription{
+	padding: 5%;
+}
+
+.socialIcons a{
+	margin-left: 15px;
+}
+
+.aboutUs:last-of-type{
+	margin-bottom: 200px;
 }
