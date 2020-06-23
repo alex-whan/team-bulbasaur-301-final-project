@@ -77,37 +77,45 @@ function renderSearchPage(req, res) {
 // Get search results handler
 function searchShows(req, res) {
   let query = req.query.search;
-  // uTellyCall('tt3398228');
-  trakt.search.text({
-    query: query,
-    type: 'show,person',
-    extended: true
-  }).then(response => {
-    // use this to get the id, not great at searching for actors
-    // console.log(response.data);
-    // console.log('trakt imdb', response.data[0].show.ids.imdb);
-    // use this to get tv show length
-    let responseArray = response.data;
-    console.log('RESPONSE DAAAAATA: ', response.data[0])
-    const finalShowArray = responseArray.map(series => {
-      return new Show(series.show);
-    })
-    console.log('FRONT END DATA HERE: ', finalShowArray);
-    res.status(200).render('pages/results.ejs', { shows: finalShowArray });
-  })
+  const url = 'https://api.themoviedb.org/3/search/tv';
+  const queryParams = {
+    api_key: process.env.TMDB_URL,
+    query: query
+  }
+  superagent.get(url, queryParams)
+    .then(results => {
+      console.log('tmdb', results.body);
+      let responseArray = results.body.results;
+      res.status(200).render('pages/results.ejs', { shows: responseArray });
+    }).catch(err => console.log(err));
+  // trakt.search.text({
+  //   query: query,
+  //   type: 'show,person',
+  //   extended: true
+  // }).then(response => {
+  // use this to get the id, not great at searching for actors
+  // console.log(response.data);
+  // console.log('trakt imdb', response.data[0].show.ids.imdb);
+  // use this to get tv show length
+  // let responseArray = response.data;
+  // console.log(responseArray[0].show.ids)
+  // })
 }
 
 // Show details handler
 function showDetails(req, res) {
   const id = req.query.id;
-  console.log(id);
-  trakt.shows.summary({
+  const image_url = req.query.image_url;
+  console.log(req.query);
+  trakt.search.id({
     id: id,
-    id_type: 'imdb',
-    extended: 'full'
+    id_type: 'tmdb',
+    extended: 'full',
+    type: 'show'
   }).then(response => {
-    let showData = new Show(response.data);
-    console.log('SHOW DATA HERE: ', showData);
+    console.log(response.data)
+    let showData = new Show(response.data[0], image_url);
+    // console.log('show data', showData);
     res.status(200).render('pages/detail.ejs', { show: showData })
     // response.data.title;
     // let overview = response.data.overview;
@@ -157,15 +165,13 @@ function deleteShowFromCollection(req, res){
 //   })
 // }).catch(err => console.log(err))
 
-
-
 // uTelly API call
 function uTellyCall(query) {
   let req = unirest('GET', 'https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup');
   req.query({
-    "country": "US",
-    "source_id": query,
-    "source": "imdb"
+    'country': 'US',
+    'source_id': query,
+    'source': 'imdb'
   });
   req.headers({
     'x-rapidapi-host': 'utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com',
@@ -187,10 +193,10 @@ function uTellyCall(query) {
   });
 }
 
-// Show/series Constructor
-function Show(obj) {
-  this.title = obj.title ? obj.title : 'No title available.';
-  this.overview = obj.overview ? obj.overview : 'No overview available.';
+function Show(obj, img) {
+  this.title = obj.show.title ? obj.show.title : 'No title available.';
+  this.overview = obj.show.overview ? obj.show.overview : 'No overview available.';
+  this.image_url = img ? img : 'No image available.';
 }
 
 // 404 Not Found error handler
@@ -203,8 +209,6 @@ client.connect()
   .then(() => {
     app.listen(PORT, () => console.log(`Listening on ${PORT}`));
   }).catch(err => console.log(err));
-
-
 
 
 
