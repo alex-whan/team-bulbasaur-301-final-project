@@ -10,17 +10,19 @@
     <img src="<%= series.image_url %>" />
     <div class="detailShow">
       <p><span>Genre:</span> <%=series.genres%></p>
-      <p><i class="fas fa-star"></i> <%=series.rating%> / 10</p>
+      <p><i style="color: rgb(252, 206, 21);" class="fas fa-star"></i> <%=series.rating%> / 10</p>
       <p><span>Year:</span> <%=series.year%></p>
       <p><span>Available translations:</span> <%=series.available_translations%></p>
     </div>
     <p class="overviewShow"><span>Overview:</span> <%=series.overview%></p>
     <div class="commentSection">
-    <h3 class="comment">Comments</h3>
+    <p class="comment"><span>Comments:</span></p>
     <% if (series.comments) { %>
       <% series.comments.split(' ,,,,,,,, ').forEach((comment, index) => { %>
+        <div class="commentBox">
         <p>Name: <%=series.usernames.split(' ,,,,,,,, ')[index]%></p>
         <p><%=comment%></p>
+      </div>
         <% }) %>
         <% } %>
         <form action="/comment?_method=PUT" method="POST">
