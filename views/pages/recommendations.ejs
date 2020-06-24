@@ -1,0 +1,33 @@
+<%- include ('../partials/head.ejs') %>
+  <body>
+    <header>
+      <%- include ('../partials/header.ejs') %>
+    </header>
+    <h1>Your collection</h1>
+    <% favoritesArray.forEach(series => { %>
+    <section>
+      <h2><%=series.title%></h2>
+      <p><%=series.overview%></p>
+      <p><%=series.genres%></p>
+      <p><%=series.rating%></p>
+      <p><%=series.year%></p>
+      <p><%=series.available_translations%></p>
+      <img src="<%= series.image_url %>"/>
+      <h3>Comments</h3>
+      <% if (series.comments) { %>
+      <% series.comments.split(' ,,,,,,,, ').forEach((comment, index) => { %>
+        <p>Name: <%=series.usernames.split(' ,,,,,,,, ')[index]%></p>
+        <p>Comment: <%=comment%></p>
+     <% }) %>
+    <% } %>
+      <form action="/comment?_method=PUT" method="POST">
+        <input type="hidden" value="<%=series.id%>" name="id" />
+        <input type="text" name="usernames" required placeholder = "Enter your name here"/>
+        <textarea required rows="4" cols="48" name = "comments" placeholder="Enter your comments here"/></textarea>
+      <button>Post Comment</button> 
+      </form>
+    </section>
+    <% }) %>
+    <footer><%- include ('../partials/footer.ejs') %></footer>
+  </body>
+</html>
