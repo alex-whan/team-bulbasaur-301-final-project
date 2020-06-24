@@ -4,6 +4,11 @@
 	justify-content: center;
 }
 
+.scubaLogo{
+	width: 120px;
+	padding-top: 4%;
+}
+
 .aboutUsImg{
 	border-radius: 10px;
 	height: 200px;
