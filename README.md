@@ -1,5 +1,7 @@
 # Code Fellows - Code 301 Final Project - Team Bulbasaur
 
+# Scuba TV
+
 **Authors:**
 
 * Lulu Sevignon
@@ -7,7 +9,9 @@
 * Kamit Satkeev
 * Alex Whan
 
-**Version:** 1.0.0
+**Version:** 1.2.0
+
+* View the deployed site for **Scuba TV** here: https://scuba-tv.herokuapp.com/
 
 ## Overview
 
@@ -21,7 +25,7 @@ A list of all dependencies required to run this program:
 
 ### Domain Modelling
 
-![Web Request Response Cycle](./assets/images/project-wrrc.png)
+![Web Request Response Cycle](./public/assets/images/project-wrrc.png)
 
 ### CRUD:
 * Create (Post) - Add series to favorites/database
@@ -31,17 +35,17 @@ A list of all dependencies required to run this program:
 
 ### Database Entity Relationship Diagram
 
-![Database Entity Relationship Diagram](./assets/images/project-erd.jpg)
+![Database Entity Relationship Diagram](./public/assets/images/project-erd.jpg)
 
 ### Application Wireframe
 
-![Wireframe 1](./assets/images/wireframe-1.jpg)
-![Wireframe 2](./assets/images/wireframe-2.jpg)
-![Wireframe 3](./assets/images/wireframe-3.jpg)
-![Wireframe 4](./assets/images/wireframe-4.jpg)
-![Wireframe 5](./assets/images/wireframe-5.jpg)
-![Wireframe 6](./assets/images/wireframe-6.jpg)
-![Wireframe 7](./assets/images/wireframe-7.jpg)
+![Wireframe 1](./public/assets/images/wireframe-1.jpg)
+![Wireframe 2](./public/assets/images/wireframe-2.jpg)
+![Wireframe 3](./public/assets/images/wireframe-3.jpg)
+![Wireframe 4](./public/assets/images/wireframe-4.jpg)
+![Wireframe 5](./public/assets/images/wireframe-5.jpg)
+![Wireframe 6](./public/assets/images/wireframe-6.jpg)
+![Wireframe 7](./public/assets/images/wireframe-7.jpg)
 
 ## Credits and Collaborations
 
