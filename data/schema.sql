@@ -9,6 +9,8 @@ CREATE TABLE series (
   rating FLOAT,
   year NUMERIC,
   tmdbId NUMERIC,
-  available_translations TEXT
+  available_translations TEXT,
+  comments TEXT,
+  usernames TEXT
 );
 
