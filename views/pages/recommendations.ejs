@@ -1,5 +1,4 @@
 <%- include ('../partials/head.ejs') %>
-
 <body>
   <header>
     <%- include ('../partials/header.ejs') %>
@@ -11,7 +10,7 @@
     <img src="<%= series.image_url %>" />
     <div class="detailShow">
       <p>Genre: <%=series.genres%></p>
-      <p><%=series.rating%> / 10</p>
+      <p><i class="fas fa-star"></i> <%=series.rating%> / 10</p>
       <p>year: <%=series.year%></p>
       <p>Available translations: <%=series.available_translations%></p>
     </div>
@@ -22,8 +21,8 @@
     <h3 class="comment">Comments</h3>
     <% if (series.comments) { %>
     <% series.comments.split(' ,,,,,,,, ').forEach((comment, index) => { %>
-    <p>Name: <%=series.usernames.split(' ,,,,,,,, ')[index]%></p>
-    <p><%=comment%></p>
+      <p>Name: <%=series.usernames.split(' ,,,,,,,, ')[index]%></p>
+      <p><%=comment%></p>
     <% }) %>
     <% } %>
     <form action="/comment?_method=PUT" method="POST">
