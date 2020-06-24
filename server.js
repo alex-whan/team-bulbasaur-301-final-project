@@ -64,6 +64,8 @@ app.post('/collection', addShowToCollection);
 // collection page route
 app.get('/collection', collectionPage);
 
+app.get('/collection/:id', showDetails);
+
 // Delete show from collection route
 app.delete('/collection/:id', deleteShowFromCollection);
 
@@ -113,26 +115,43 @@ function searchShows(req, res) {
   // })
 }
 
+// Put some logic into show details page saying "if req.params is TRUE, I don't want to do my search, I want to render my detail page using that param id. If not, then I want it to do everything else it was already doing."
+// Similar logic to city explorer to check db for location and save it if you didn't have it yet
+// Similar logic saving a book in Book App
+// Basically, controlling API call while using similar function at same time.
+
 // Show details handler
 function showDetails(req, res) {
-  const tmdbId = req.query.id;
-  const image_url = req.query.image_url;
-  // console.log(req.query);
-  trakt.search.id({
-    id: tmdbId,
-    id_type: 'tmdb',
-    extended: 'full',
-    type: 'show'
-  }).then(response => {
-    console.log('THIS IS OUR RESPONSE DATA: ', (response.data[0].show));
-    let showData = new Show(response.data[0].show, image_url, tmdbId);
-    console.log('constructed show', showData);
-    res.status(200).render('pages/detail.ejs', { show: showData })
-  }).catch((err) => {
-    console.log(err);
-    res.status(200).render('pages/error.ejs')
-  });
-}
+  // if(req.params > 0){
+  //   console.log('OUR REQUEST PARAMS: ', req.params[0]);
+    
+  //   let sql = 'SELECT * FROM series WHERE id=$1;';
+  //   let safeValues = [req.params];
+  //   client.query(sql, safeValues)
+  //     .then(sqlResults => {
+  //       console.log('SQL RESULTS :', sqlResults.rows);
+  //       res.status(200).render('pages/detail.ejs', { show: sqlResults.rows[0] })
+  //     }).catch(error => console.log(error));
+  // } else {
+    const tmdbId = req.query.id;
+    const image_url = req.query.image_url;
+    // console.log(req.query);
+    trakt.search.id({
+      id: tmdbId,
+      id_type: 'tmdb',
+      extended: 'full',
+      type: 'show'
+    }).then(response => {
+      // console.log('THIS IS OUR RESPONSE DATA: ', (response.data[0].show));
+      let showData = new Show(response.data[0].show, image_url, tmdbId);
+      // console.log('constructed show', showData);
+      res.status(200).render('pages/detail.ejs', { show: showData })
+    }).catch((err) => {
+      console.log(err);
+      res.status(200).render('pages/error.ejs')
+    });
+  }
+// }
 
 
 // this.title = obj.title ? obj.title : 'No title available.';
@@ -152,42 +171,45 @@ function addShowToCollection(req, res){
   client.query(idCheck, idSafeValue)
     .then(idResults =>{
       if (!idResults.rowCount){
-        console.log( 'this is my id Results', idResults.rowCount)
+        // console.log( 'this is my id Results', idResults.rowCount)
         let {title, overview, image_url, genres, rating, available_translations, year, tmdbId} = req.body;
-        let sql = 'INSERT INTO series (title, overview, image_url, genres, rating, available_translations, year, tmdbId) VALUES ($1, $2, $3, $4, $5, $6, $7, $8);';
+        let sql = 'INSERT INTO series (title, overview, image_url, genres, rating, available_translations, year, tmdbId) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;';
         let safeValues = [title, overview, image_url, genres, rating, available_translations, year, tmdbId];
 
         client.query(sql, safeValues)
-          // .then(sqlResults => {
-            // let id = sqlResults.rows[0].id;
-            // res.status(200).redirect('');
+          .then((sqlResults) => {
+            // console.log('THIS IS MY SQL RESULTS: ', sqlResults);
+            let id = sqlResults.rows[0].id;
+            // res.status(200);
+            res.status(200).redirect('/collection');
             // res.status(200).redirect(`/collection/${id}`);
-          // }).catch(error => console.log(error))
+          }).catch(error => console.log(error))
       }
     }).catch(error => console.log(error))
 }
 
-// collection Page
+// Collection Page
 function collectionPage(req, res){
   let sql = 'SELECT * FROM series;';
   client.query(sql)
     .then(sqlResults =>{
-      console.log(' this is my sqlResults', sqlResults.rows);
-      response.status(200).render('pages/collection.ejs', {favoritesArray: sqlResults.rows });
+      // console.log(' this is my sqlResults', sqlResults.rows);
+      let favorites = sqlResults.rows;
+      res.status(200).render('pages/collection.ejs', {favoritesArray: favorites });
     }).catch(error => console.log(error))
 }
 
 // Delete show from collection handler
 function deleteShowFromCollection(req, res){
-  let showId = request.params.id;
+  let showId = req.params.id;
 
   let sql = 'DELETE FROM series WHERE id=$1;';
   let safeVales = [showId];
 
   client.query(sql, safeVales)
     .then(() => {
-      res.redirect('/collection');
-    });
+      res.status(200).redirect('/collection')
+    }).catch(error => console.log(error));
 }
 
 //   trakt.episodes.summary({
