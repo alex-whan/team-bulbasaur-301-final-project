@@ -9,12 +9,12 @@
       <h2 class="titleShow"><%=series.title%></h2>
       <img src="<%= series.image_url %>" class="imgShow"/>
       <div class="detailShow">
-      <p>Genre: <%=series.genres%></p>
+      <p><span>Genre:</span> <%=series.genres%></p>
       <p><i class="fas fa-star"></i> <%=series.rating%> / 10</p>
-      <p>year: <%=series.year%></p>
-      <p>Available translations: <%=series.available_translations%></p>
+      <p><span>Year:</span> <%=series.year%></p>
+      <p><span>Available translations:</span> <%=series.available_translations%></p>
       </div>
-      <p class="overviewShow"><%=series.overview%></p>
+      <p class="overviewShow"><span>Overview:</span> <%=series.overview%></p>
       <form action='/collection/<%= series.id %>?_method=DELETE' method='POST'>
         <button class="detailButton">Remove from My Collection</button> 
       </form>

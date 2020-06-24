@@ -106,11 +106,17 @@ a:hover{
 	grid-column-start: 2;
 	grid-column-end: 3;
 	align-self: center;
+	font-size: 20px;
+}
+
+.detailShow>p{
+	padding-bottom: 20px;
 }
 
 .overviewShow{
 	grid-column-start: 1;
 	grid-column-end: 3;
+	font-size: 20px;
 }
 
 .buttonShow{
@@ -205,4 +211,9 @@ a:hover{
 	flex-direction: column;
 	justify-content: center;
 	padding: 10%;
+}
+
+span{
+	font-weight: bolder;
+	color: #4B95F5;
 }
