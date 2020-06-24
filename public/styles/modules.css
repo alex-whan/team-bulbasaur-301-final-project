@@ -155,3 +155,8 @@ a:hover{
 	row-gap: 2%;
 	/* column-gap: 2%; */
 }
+ 
+.comment {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}

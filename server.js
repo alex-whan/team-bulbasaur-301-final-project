@@ -103,7 +103,7 @@ function searchShows(req, res) {
   }
   superagent.get(url, queryParams)
     .then(results => {
-      if(results.body.results.length !== 0){
+      if (results.body.results.length !== 0) {
         console.log('THESE ARE RESULTS :', results.body.results);
         let responseArray = results.body.results;
         res.status(200).render('pages/results.ejs', { shows: responseArray });
@@ -112,21 +112,8 @@ function searchShows(req, res) {
         res.status(200).render('pages/no-results.ejs');
       }
     }).catch(err => console.log(err));
-};   
-  
-      // console.log('THIS IS OUR TMDB: ', results.body);
-  // trakt.search.text({
-  //   query: query,
-  //   type: 'show,person',
-  //   extended: true
-  // }).then(response => {
-  // use this to get the id, not great at searching for actors
-  // console.log(response.data);
-  // console.log('trakt imdb', response.data[0].show.ids.imdb);
-  // use this to get tv show length
-  // let responseArray = response.data;
-  // console.log(responseArray[0].show.ids)
-  // })
+}
+
 
 // Put some logic into show details page saying "if req.params is TRUE, I don't want to do my search, I want to render my detail page using that param id. If not, then I want it to do everything else it was already doing."
 // Similar logic to city explorer to check db for location and save it if you didn't have it yet
@@ -147,35 +134,25 @@ function showDetails(req, res) {
   //     }).catch(error => console.log(error));
   // } else {
 
-    const tmdbId = req.query.id;
-    const image_url = req.query.image_url;
-    // console.log(req.query);
-    trakt.search.id({
-      id: tmdbId,
-      id_type: 'tmdb',
-      extended: 'full',
-      type: 'show'
-    }).then(response => {
-      // console.log('THIS IS OUR RESPONSE DATA: ', (response.data[0].show));
-      let showData = new Show(response.data[0].show, image_url, tmdbId);
-      // console.log('constructed show', showData);
-      res.status(200).render('pages/detail.ejs', { show: showData }).catch(err => console.log(err));
-    }).catch((err) => {
-      console.log(err);
-      res.status(200).render('pages/error.ejs').catch(err => console.log(err));
-    });
-  }
+  const tmdbId = req.query.id;
+  const image_url = req.query.image_url;
+  // console.log(req.query);
+  trakt.search.id({
+    id: tmdbId,
+    id_type: 'tmdb',
+    extended: 'full',
+    type: 'show'
+  }).then(response => {
+    // console.log('THIS IS OUR RESPONSE DATA: ', (response.data[0].show));
+    let showData = new Show(response.data[0].show, image_url, tmdbId);
+    // console.log('constructed show', showData);
+    res.status(200).render('pages/detail.ejs', { show: showData })
+  }).catch((err) => {
+    console.log(err);
+    res.status(200).render('pages/error.ejs').catch(err => console.log(err));
+  });
+}
 // }
-
-
-// this.title = obj.title ? obj.title : 'No title available.';
-//   this.overview = obj.overview ? obj.overview : 'No overview available.';
-//   this.image_url = img ? img : 'Image not available.';
-//   this.genres = obj.genres.join(', ') ? obj.genres.join(', ') : 'Genres not available';
-//   this.rating = obj.rating ? obj.rating : 'Rating not available';
-//   this.available_translations = obj.available_translations.join(', ') ? obj.available_translations.join(', ') : 'Genres not available';
-//   this.year = obj.year ? obj.year : 'Year not available';
-// this.id = id;
 
 // Add show to collection handler
 function addShowToCollection(req, res) {
@@ -193,10 +170,8 @@ function addShowToCollection(req, res) {
         client.query(sql, safeValues)
           .then((sqlResults) => {
             // console.log('THIS IS MY SQL RESULTS: ', sqlResults);
-            let id = sqlResults.rows[0].id;
-            // res.status(200);
+            // let id = sqlResults.rows[0].id;
             res.status(200).redirect('/collection');
-            // res.status(200).redirect(`/collection/${id}`);
           }).catch(error => console.log(error))
       }
     }).catch(error => console.log(error))
@@ -312,7 +287,7 @@ function Show(obj, img, tmdbId) {
   this.overview = obj.overview ? obj.overview : 'No overview available.';
   this.image_url = img ? img : 'Image not available.';
   this.genres = obj.genres.join(', ') ? obj.genres.join(', ') : 'Genres not available';
-  this.rating = obj.rating ? obj.rating : 'Rating not available';
+  this.rating = (obj.rating).toFixed(1) ? (obj.rating).toFixed(1) : 'Rating not available';
   this.available_translations = obj.available_translations.join(', ') ? obj.available_translations.join(', ') : 'Genres not available';
   this.year = obj.year ? obj.year : 'Year not available';
   this.tmdbId = tmdbId;

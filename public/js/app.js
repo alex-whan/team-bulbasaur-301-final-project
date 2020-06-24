@@ -1,13 +1,12 @@
 'use strict';
 
-function hidePreState(event) {
-    $('.preState').hide();
+function hidePreState() {
+  $('.preState').hide();
 }
 
-function hideAddButton(event) {
-    event.preventDefault();
-    $('#addButton').hide();
-    $('.preState').show();
+function hideAddButton() {
+  $('#addButton').hide();
+  $('.preState').show();
 }
 
 $('#addButton').on('click', hideAddButton);
