@@ -133,25 +133,61 @@ function showDetails(req, res) {
   //       res.status(200).render('pages/detail.ejs', { show: sqlResults.rows[0] })
   //     }).catch(error => console.log(error));
   // } else {
-
+    // let req = unirest('GET', "https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup");
+    // req.query({
+    //   'country': 'US',
+    //   'source_id': "test",
+    //   'source': 'tmdb'
+    // });
+    // req.headers({
+    //   'x-rapidapi-host': 'utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com',
+    //   'x-rapidapi-key': process.env.RAPID_API_KEY,
+    //   'useQueryString': true
+    // });
   const tmdbId = req.query.id;
   const image_url = req.query.image_url;
-  // console.log(req.query);
+  // const platforms = uTellyCall(tmdbId);
+  // console.log(platforms);
   trakt.search.id({
     id: tmdbId,
     id_type: 'tmdb',
     extended: 'full',
     type: 'show'
   }).then(response => {
-    // console.log('THIS IS OUR RESPONSE DATA: ', (response.data[0].show));
-    let showData = new Show(response.data[0].show, image_url, tmdbId);
-    // console.log('constructed show', showData);
+  let url =  "https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup";
+  let queryParams = {
+  'country': 'US',
+  'source_id': tmdbId,
+  'source': 'tmdb'
+  };
+  superagent.get(url, queryParams)
+  .set({'x-rapidapi-host': 'utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com'})
+  .set({'x-rapidapi-key': process.env.RAPID_API_KEY})
+  .set({'useQueryString': true})
+  .then(results => {
+    let platforms = results.body.collection.locations.map(location => location.display_name);
+    let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
+    console.log('constructed show', showData);
     res.status(200).render('pages/detail.ejs', { show: showData })
-  }).catch((err) => {
-    console.log(err);
-    res.status(200).render('pages/error.ejs').catch(err => console.log(err));
+  }).catch(err => {
+    let platforms = [];
+    let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
+    console.log('constructed show', showData);
+    res.status(200).render('pages/detail.ejs', { show: showData }) 
+    console.log(err) 
   });
+
+    // console.log('THIS IS OUR RESPONSE DATA: ', (response.data[0].show));
+  //   let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
+  //   console.log('constructed show', showData);
+  //   res.status(200).render('pages/detail.ejs', { show: showData })
+  // }).catch((err) => {
+  //   console.log(err);
+  //   res.status(200).render('pages/error.ejs').catch(err => console.log(err));
+  // });
+})
 }
+
 // }
 
 // Add show to collection handler
@@ -216,11 +252,12 @@ function deleteShowFromCollection(req, res) {
 
 // uTelly API call
 function uTellyCall(query) {
-  let req = unirest('GET', 'https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/lookup');
+  console.log(query);
+  let req = unirest('GET', "https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup");
   req.query({
     'country': 'US',
-    'source_id': query,
-    'source': 'imdb'
+    'source_id': "test",
+    'source': 'tmdb'
   });
   req.headers({
     'x-rapidapi-host': 'utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com',
@@ -228,8 +265,14 @@ function uTellyCall(query) {
     'useQueryString': true
   });
   req.end(function (res) {
+    if (res.error) throw new Error(res.error);
+         
     // tells you where you can find the tv show, eg netfilx google play
-    // console.log(res.body.results);
+    console.log('utellyResults', res.body.collection.locations);
+    return res.body.collection.locations.map(location => location.display_name);
+
+    // console.log(platformNames);
+    // return platformNames;
     // get imdb id: res.body.results[0].external_ids.imdb.id 
     // res.body.results.picture
     // loop through location to get all of them
@@ -282,7 +325,7 @@ function saveComment(req, res) {
     })
 }
 
-function Show(obj, img, tmdbId) {
+function Show(obj, img, tmdbId, platforms) {
   this.title = obj.title ? obj.title : 'No title available.';
   this.overview = obj.overview ? obj.overview : 'No overview available.';
   this.image_url = img ? img : 'Image not available.';
@@ -291,6 +334,7 @@ function Show(obj, img, tmdbId) {
   this.available_translations = obj.available_translations.join(', ') ? obj.available_translations.join(', ') : 'Genres not available';
   this.year = obj.year ? obj.year : 'Year not available';
   this.tmdbId = tmdbId;
+  this.platforms = platforms ? platforms.join(', '): 'Platforms not available';
 }
 
 // 404 Not Found error handler
