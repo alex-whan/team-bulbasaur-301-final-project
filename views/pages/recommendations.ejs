@@ -1,50 +1,45 @@
 <%- include ('../partials/head.ejs') %>
-  <body>
-    <header>
-      <%- include ('../partials/header.ejs') %>
-    </header>
-    <h1>Your collection</h1>
-    <% favoritesArray.forEach(series => { %>
-      <div class="collectionPage">
-        <h2 class="titleShow"><%=series.title%></h2>
-        <img src="<%= series.image_url %>"/>
-      <div class="detailShow">
-        <p>Genre: <%=series.genres%></p>
-        <p><i class="fas fa-star"></i> <%=series.rating%> / 10</p>
-        <p>year: <%=series.year%></p>
-        <p>Available translations: <%=series.available_translations%></p>
-      </div>
-      <h3 class="comment">Comments</h3>
-      <% if (series.comments) { %>
-      <% series.comments.split(' ,,,,,,,, ').forEach((comment, index) => { %>
-        <p>Name: <%=series.usernames.split(' ,,,,,,,, ')[index]%></p>
-        <p><%=comment%></p>
-     <% }) %>
-    <% } %>
-      <form action="/comment?_method=PUT" method="POST">
-        <input type="hidden" value="<%=series.id%>" name="id" />
-        <input type="text" name="usernames" required placeholder = "Enter your name here"/>
-        <textarea required rows="4" cols="48" name = "comments" placeholder="Enter your comments here"/></textarea>
-      <button>Post Comment</button> 
-      </form>
+<body>
+  <header>
+    <%- include ('../partials/header.ejs') %>
+  </header>
+  <h1>User Recommendations</h1>
+  <% favoritesArray.forEach(series => { %>
+  <div class="collectionPage">
+    <h2 class="titleShow"><%=series.title%></h2>
+    <img src="<%= series.image_url %>" />
+    <div class="detailShow">
+      <p>Genre: <%=series.genres%></p>
+      <p><i class="fas fa-star"></i> <%=series.rating%> / 10</p>
+      <p>year: <%=series.year%></p>
+      <p>Available translations: <%=series.available_translations%></p>
     </div>
+    <p class="overviewShow"><%=series.overview%></p>
+    <form action='/collection/<%= series.id %>?_method=DELETE' method='POST'>
+      <button class="detailButton">Remove from Collection</button>
+    </form>
+    <h3 class="comment">Comments</h3>
+    <% if (series.comments) { %>
+    <% series.comments.split(' ,,,,,,,, ').forEach((comment, index) => { %>
+      <p>Name: <%=series.usernames.split(' ,,,,,,,, ')[index]%></p>
+      <p><%=comment%></p>
     <% }) %>
-    <footer><%- include ('../partials/footer.ejs') %></footer>
-  </body>
+    <% } %>
+    <form action="/comment?_method=PUT" method="POST">
+      <input type="hidden" value="<%=series.id%>" name="id" />
+      <input type="text" name="usernames" required placeholder="Enter your name here" />
+      <textarea required rows="4" cols="48" name="comments" placeholder="Enter your comments here" /></textarea>
+      <button>Post Comment</button>
+    </form>
+  </div>
+  <% }) %>
+  <footer><%- include ('../partials/footer.ejs') %></footer>
+</body>
+
 </html>
 
 
 <!-- 
-  <h2 class="titleShow"><%#series.title%></h2>
-  <img src="<%# series.image_url %>" class="imgShow"/>
-  <div class="detailShow">
-  <p>Genre: <#=series.genres%></p>
-  <p><%#series.rating%> / 10</p>
-  <p>year: <%#series.year%></p>
-  <p>Available translations: <%#series.available_translations%></p>
-  </div>
-  <p class="overviewShow"><%#series.overview%></p>
-  <form action='/collection/<%# series.id %>?_method=DELETE' method='POST'>
-    <button class="detailButton">Remove from Collection</button> 
-  </form>
+
+  
 </div> -->
