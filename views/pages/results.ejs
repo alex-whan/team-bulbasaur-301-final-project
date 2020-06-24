@@ -7,10 +7,10 @@
    <%#if (show.show) { %>
     <div class="resultsPage">
     <form action="/details" method="GET">
+      <img src="https://image.tmdb.org/t/p/w260_and_h390_bestv2<%=show.poster_path%>" class="resultsImg"/>
     <h2 class="resultsTitle"><%= show.name %></h2>
     <input type="hidden" value="<%=show.id%>" name="id" />
     <input type="hidden" value="https://image.tmdb.org/t/p/w260_and_h390_bestv2<%=show.poster_path%>" name="image_url" />
-    <img src="https://image.tmdb.org/t/p/w260_and_h390_bestv2<%=show.poster_path%>" class="resultsImg"/>
     <button class="detailButton" class="resultsButton">See Details</button>
     </form>
     </div>
