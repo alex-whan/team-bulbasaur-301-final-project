@@ -13,7 +13,7 @@ main{
 
 button{
   background-color: rgb(133, 133, 133);
-  border-radius: 5px;
+  border-radius: 3px;
   align-self: center;
   cursor: pointer;
   
@@ -25,14 +25,22 @@ h1 {
   font-size: 55px;
   text-align: center;
   margin-top: 2em ;
-  
 }
+
 h4{
   font-family: 'Jost', sans-serif;
   text-align: center;
   font-size: 25px;
-  margin: 15%;
-  
+  margin: 5% 15%;
+}
+
+h2{
+  font-family: 'Alegreya SC', serif;
+  font-size: 35px;
+}
+
+a{
+  text-decoration: none;
 }
 /* font ready to be used for anything */
 /* font-family: 'Alegreya SC', serif; */

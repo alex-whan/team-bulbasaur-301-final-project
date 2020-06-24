@@ -56,6 +56,54 @@ a:hover{
 
 .button{
 	border: none;
-	padding: 15px 32px;
+	box-shadow: 1px 1px 0 rgb(215, 214, 214);
+	padding: 15px 45px;
+	font-size: 15px;
+	display: flex;
+	justify-content: center;
+	margin: 15px auto 70px auto;
+}
 
+.detailButton{
+	border: none;
+	box-shadow: 1px 1px 0 rgb(215, 214, 214);
+	padding: 10px 30px;
+}
+
+.detailPage{
+	margin: 0 10%;
+	padding: 5%;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto auto auto;
+	row-gap: 2%;
+	/* column-gap: 2%; */
+}
+.titleShow{
+	justify-self: center;
+	grid-column-start: 1;
+	grid-column-end: 3;
+}
+
+.imgShow{
+	max-width: 220px;
+	margin: 3% 3% 3% 0;grid-column-start: 1;
+	grid-column-end: 2;
+}
+
+.detailShow{
+	grid-column-start: 2;
+	grid-column-end: 3;
+	align-self: center;
+}
+
+.overviewShow{
+	grid-column-start: 1;
+	grid-column-end: 3;
+}
+
+.buttonShow{
+	grid-column-start: 1;
+	grid-column-end: 3;
+	align-self: center;
 }
