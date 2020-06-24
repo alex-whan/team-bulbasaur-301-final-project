@@ -109,7 +109,7 @@ function searchShows(req, res) {
         res.status(200).render('pages/results.ejs', { shows: responseArray, query: query });
       } else {
         console.log('NO RESULTS', results.body.results);
-        res.status(200).render('pages/no-results.ejs', {query: query});
+        res.status(200).render('pages/no-results.ejs', { query: query });
       }
     }).catch(err => console.log(err));
 }
@@ -133,17 +133,17 @@ function showDetails(req, res) {
   //       res.status(200).render('pages/detail.ejs', { show: sqlResults.rows[0] })
   //     }).catch(error => console.log(error));
   // } else {
-    // let req = unirest('GET', "https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup");
-    // req.query({
-    //   'country': 'US',
-    //   'source_id': "test",
-    //   'source': 'tmdb'
-    // });
-    // req.headers({
-    //   'x-rapidapi-host': 'utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com',
-    //   'x-rapidapi-key': process.env.RAPID_API_KEY,
-    //   'useQueryString': true
-    // });
+  // let req = unirest('GET', "https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup");
+  // req.query({
+  //   'country': 'US',
+  //   'source_id': "test",
+  //   'source': 'tmdb'
+  // });
+  // req.headers({
+  //   'x-rapidapi-host': 'utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com',
+  //   'x-rapidapi-key': process.env.RAPID_API_KEY,
+  //   'useQueryString': true
+  // });
   const tmdbId = req.query.id;
   const image_url = req.query.image_url;
   // const platforms = uTellyCall(tmdbId);
@@ -154,38 +154,42 @@ function showDetails(req, res) {
     extended: 'full',
     type: 'show'
   }).then(response => {
-  let url =  "https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup";
-  let queryParams = {
-  'country': 'US',
-  'source_id': tmdbId,
-  'source': 'tmdb'
-  };
-  superagent.get(url, queryParams)
-  .set({'x-rapidapi-host': 'utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com'})
-  .set({'x-rapidapi-key': process.env.RAPID_API_KEY})
-  .set({'useQueryString': true})
-  .then(results => {
-    let platforms = results.body.collection.locations.map(location => location.display_name);
-    let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
-    console.log('constructed show', showData);
-    res.status(200).render('pages/detail.ejs', { show: showData })
-  }).catch(err => {
-    let platforms = [];
-    let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
-    console.log('constructed show', showData);
-    res.status(200).render('pages/detail.ejs', { show: showData }) 
-    console.log(err) 
-  });
+    let url = 'https://utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com/idlookup';
+    let queryParams = {
+      'country': 'US',
+      'source_id': tmdbId,
+      'source': 'tmdb'
+    };
+    superagent.get(url, queryParams)
+      .set({ 'x-rapidapi-host': 'utelly-tv-shows-and-movies-availability-v1.p.rapidapi.com' })
+      .set({ 'x-rapidapi-key': process.env.RAPID_API_KEY })
+      .set({ 'useQueryString': true })
+      .then(results => {
+        let platforms = results.body.collection.locations
+          .map(location => {
+            console.log(location.display_name);
+            return location.display_name.replace('IVAUS','');
+          });
+        let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
+        console.log('constructed show', showData);
+        res.status(200).render('pages/detail.ejs', { show: showData })
+      }).catch(err => {
+        let platforms = [];
+        let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
+        console.log('constructed show', showData);
+        res.status(200).render('pages/detail.ejs', { show: showData })
+        console.log(err)
+      });
 
     // console.log('THIS IS OUR RESPONSE DATA: ', (response.data[0].show));
-  //   let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
-  //   console.log('constructed show', showData);
-  //   res.status(200).render('pages/detail.ejs', { show: showData })
-  // }).catch((err) => {
-  //   console.log(err);
-  //   res.status(200).render('pages/error.ejs').catch(err => console.log(err));
-  // });
-})
+    //   let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
+    //   console.log('constructed show', showData);
+    //   res.status(200).render('pages/detail.ejs', { show: showData })
+    // }).catch((err) => {
+    //   console.log(err);
+    //   res.status(200).render('pages/error.ejs').catch(err => console.log(err));
+    // });
+  })
 }
 
 // }
@@ -199,9 +203,9 @@ function addShowToCollection(req, res) {
     .then(idResults => {
       if (!idResults.rowCount) {
         // console.log( 'this is my id Results', idResults.rowCount)
-        let { title, overview, image_url, genres, rating, available_translations, year, tmdbId } = req.body;
-        let sql = 'INSERT INTO series (title, overview, image_url, genres, rating, available_translations, year, tmdbId) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING id;';
-        let safeValues = [title, overview, image_url, genres, rating, available_translations, year, tmdbId];
+        let { title, overview, image_url, genres, rating, available_translations, year, tmdbId, platforms } = req.body;
+        let sql = 'INSERT INTO series (title, overview, image_url, genres, rating, available_translations, year, tmdbId, platforms) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id;';
+        let safeValues = [title, overview, image_url, genres, rating, available_translations, year, tmdbId, platforms];
 
         client.query(sql, safeValues)
           .then((sqlResults) => {
@@ -266,7 +270,7 @@ function uTellyCall(query) {
   });
   req.end(function (res) {
     if (res.error) throw new Error(res.error);
-         
+
     // tells you where you can find the tv show, eg netfilx google play
     console.log('utellyResults', res.body.collection.locations);
     return res.body.collection.locations.map(location => location.display_name);
@@ -334,7 +338,7 @@ function Show(obj, img, tmdbId, platforms) {
   this.available_translations = obj.available_translations.join(', ') ? obj.available_translations.join(', ') : 'Genres not available';
   this.year = obj.year ? obj.year : 'Year not available';
   this.tmdbId = tmdbId;
-  this.platforms = platforms ? platforms.join(', '): 'Platforms not available';
+  this.platforms = platforms ? platforms.join(', ') : 'Platforms not available';
 }
 
 // 404 Not Found error handler

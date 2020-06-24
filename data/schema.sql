@@ -11,6 +11,7 @@ CREATE TABLE series (
   tmdbId NUMERIC,
   available_translations TEXT,
   comments TEXT,
-  usernames TEXT
+  usernames TEXT,
+  platforms TEXT
 );
 
