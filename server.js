@@ -103,10 +103,18 @@ function searchShows(req, res) {
   }
   superagent.get(url, queryParams)
     .then(results => {
-      // console.log('THIS IS OUR TMDB: ', results.body);
-      let responseArray = results.body.results;
-      res.status(200).render('pages/results.ejs', { shows: responseArray });
+      if(results.body.results.length !== 0){
+        console.log('THESE ARE RESULTS :', results.body.results);
+        let responseArray = results.body.results;
+        res.status(200).render('pages/results.ejs', { shows: responseArray });
+      } else {
+        console.log('NO RESULTS', results.body.results);
+        res.status(200).render('pages/no-results.ejs');
+      }
     }).catch(err => console.log(err));
+};   
+  
+      // console.log('THIS IS OUR TMDB: ', results.body);
   // trakt.search.text({
   //   query: query,
   //   type: 'show,person',
@@ -119,7 +127,6 @@ function searchShows(req, res) {
   // let responseArray = response.data;
   // console.log(responseArray[0].show.ids)
   // })
-}
 
 // Put some logic into show details page saying "if req.params is TRUE, I don't want to do my search, I want to render my detail page using that param id. If not, then I want it to do everything else it was already doing."
 // Similar logic to city explorer to check db for location and save it if you didn't have it yet
@@ -139,24 +146,25 @@ function showDetails(req, res) {
   //       res.status(200).render('pages/detail.ejs', { show: sqlResults.rows[0] })
   //     }).catch(error => console.log(error));
   // } else {
-  const tmdbId = req.query.id;
-  const image_url = req.query.image_url;
-  // console.log(req.query);
-  trakt.search.id({
-    id: tmdbId,
-    id_type: 'tmdb',
-    extended: 'full',
-    type: 'show'
-  }).then(response => {
-    console.log('THIS IS OUR RESPONSE DATA: ', (response.data[0].show));
-    let showData = new Show(response.data[0].show, image_url, tmdbId);
-    // console.log('constructed show', showData);
-    res.status(200).render('pages/detail.ejs', { show: showData })
-  }).catch((err) => {
-    console.log(err);
-    res.status(200).render('pages/error.ejs')
-  });
-}
+
+    const tmdbId = req.query.id;
+    const image_url = req.query.image_url;
+    // console.log(req.query);
+    trakt.search.id({
+      id: tmdbId,
+      id_type: 'tmdb',
+      extended: 'full',
+      type: 'show'
+    }).then(response => {
+      // console.log('THIS IS OUR RESPONSE DATA: ', (response.data[0].show));
+      let showData = new Show(response.data[0].show, image_url, tmdbId);
+      // console.log('constructed show', showData);
+      res.status(200).render('pages/detail.ejs', { show: showData }).catch(err => console.log(err));
+    }).catch((err) => {
+      console.log(err);
+      res.status(200).render('pages/error.ejs').catch(err => console.log(err));
+    });
+  }
 // }
 
 
@@ -173,7 +181,7 @@ function showDetails(req, res) {
 function addShowToCollection(req, res) {
   let idCheck = 'SELECT * FROM series WHERE tmdbId=$1;';
   let idSafeValue = [req.body.tmdbId];
-  console.log('We are in the addShowFunction');
+  // console.log('We are in the addShowFunction');
   client.query(idCheck, idSafeValue)
     .then(idResults => {
       if (!idResults.rowCount) {
