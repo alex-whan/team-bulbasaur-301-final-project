@@ -22,7 +22,7 @@ button{
 h1 {
   color: rgb(255, 255, 255);
   font-family: 'Luckiest Guy', cursive;
-  font-size: 55px;
+  font-size: 40px;
   text-align: center;
   margin-top: 5%;
 }
@@ -49,5 +49,9 @@ h2{
 a{
   text-decoration: none;
 }
-/* font ready to be used for anything */
+
+p{
+  font-family: 'Jost', sans-serif;
+}
+
 /* font-family: 'Alegreya SC', serif; */

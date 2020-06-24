@@ -21,13 +21,17 @@ header{
   border-bottom: solid 2px grey;
 }
 
+.scubaTitle{
+  font-size: 70px;
+}
+
 form{
   margin-top: 50px;
   flex-direction: column;
 }
-form:last-of-type{
+/* form:last-of-type{
   margin-bottom: 200px;
-}
+} */
 
 input{
   width: 300px;

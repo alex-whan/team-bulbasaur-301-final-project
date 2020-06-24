@@ -7,13 +7,13 @@
   <h2 class="titleShow"><%=show.title%></h2>
   <img src="<%= show.image_url %>" class="imgShow"/>
   <div class="detailShow">
-  <p>Genre: <%=show.genres%></p>
-  <p><span style="color: rgb(250, 216, 21);"><i class="fas fa-star"></i> </span><%=show.rating%> / 10</p>
-  <p>year: <%=show.year%></p>
-  <p>Platforms: <%= show.platforms%></p>
-  <p>Available translations: <%=show.available_translations%></p>
+    <p><span>Genre:</span> <%=show.genres%></p>
+    <p><i style="color: rgb(252, 206, 21);" class="fas fa-star"></i> <%=show.rating%> / 10</p>
+    <p><span>Year:</span> <%=show.year%></p>
+    <p><span>Platforms:</span> <%= show.platforms%></p>
+    <p><span>Available translations:</span> <%=show.available_translations%></p>
   </div>
-  <p class="overviewShow">Overview: <%=show.overview%></p>
+  <p class="overviewShow"><span>Overview:</span> <%=show.overview%></p>
   <form action="/collection" method="POST">
     <input type="hidden" value="<%=show.title%>" name="title" />
     <input type="hidden" value="<%=show.overview%>" name="overview" />
