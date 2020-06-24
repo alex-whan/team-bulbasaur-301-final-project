@@ -42,6 +42,20 @@ h2.aboutUsName{
 	margin-left: 15px;
 }
 
+.socialIcons :hover{
+	transform: translateY(2px);
+}
+
+a:hover{
+	color: rgb(148, 146, 146);
+}
+
 .aboutUs:last-of-type{
 	margin-bottom: 200px;
+}
+
+.button{
+	border: none;
+	padding: 15px 32px;
+
 }
