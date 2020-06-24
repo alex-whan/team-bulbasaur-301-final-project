@@ -106,10 +106,10 @@ function searchShows(req, res) {
       if (results.body.results.length !== 0) {
         console.log('THESE ARE RESULTS :', results.body.results);
         let responseArray = results.body.results;
-        res.status(200).render('pages/results.ejs', { shows: responseArray });
+        res.status(200).render('pages/results.ejs', { shows: responseArray, query: query });
       } else {
         console.log('NO RESULTS', results.body.results);
-        res.status(200).render('pages/no-results.ejs');
+        res.status(200).render('pages/no-results.ejs', {query: query});
       }
     }).catch(err => console.log(err));
 }

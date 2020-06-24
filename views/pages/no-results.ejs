@@ -3,8 +3,13 @@
   <header>
     <%- include ('../partials/header.ejs') %>
   </header>
-  <h2>Sorry, no results.</h2>
-  <a href="/search"><button>Search Again</button></a>
+  <main>
+  <div id="noResults">
+    <h2>Sorry, no results for: "<%=query%>"</h2>
+    <br><br>
+    <a href="/search"><button>Search Again</button></a>
+  </div>
+</main>
   <footer><%- include ('../partials/footer.ejs') %></footer>
 </body>
 </html>
