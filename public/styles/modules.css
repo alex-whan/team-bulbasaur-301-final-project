@@ -91,6 +91,11 @@ a:hover{
 }
 
 .imgShow{
+	background-image: url(../assets/images/place-holder.jpg);
+	background-size: cover;
+	border: solid 2px white;
+	width: 220px;
+	height: 330px;
 	max-width: 220px;
 	margin: 3% 3% 3% 0;
 	grid-column-start: 1;
@@ -136,6 +141,11 @@ a:hover{
 }
 
 .resultsImg{
+	background-image: url(../assets/images/place-holder.jpg);
+	background-size: cover;
+	border: solid 2px white;
+	width: 220px;
+	height: 330px;
 	max-width: 220px;
 	/* margin: 3% 3% 3% 0; */
 	/* grid-column-start: 1;
