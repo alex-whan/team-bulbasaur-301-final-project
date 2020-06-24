@@ -69,8 +69,10 @@ app.get('/collection/:id', showDetails);
 // Delete show from collection route
 app.delete('/collection/:id', deleteShowFromCollection);
 
+// recommendation page
 app.get('/recommendations', recommendationPage)
 
+// add comments to recommendations
 app.put('/comment', saveComment)
 
 // 404 error route
@@ -146,7 +148,7 @@ function showDetails(req, res) {
     extended: 'full',
     type: 'show'
   }).then(response => {
-    // console.log('THIS IS OUR RESPONSE DATA: ', (response.data[0].show));
+    console.log('THIS IS OUR RESPONSE DATA: ', (response.data[0].show));
     let showData = new Show(response.data[0].show, image_url, tmdbId);
     // console.log('constructed show', showData);
     res.status(200).render('pages/detail.ejs', { show: showData })
@@ -248,6 +250,7 @@ function uTellyCall(query) {
     // get imdb id: res.body.results[0].external_ids.imdb.id 
     // res.body.results.picture
     // loop through location to get all of them
+
     // res.body.results[0].locations[0].display_name
     // res.body.results[0].locations[0].icon
     // res.body.results[0].locations[0].url
@@ -260,7 +263,6 @@ function recommendationPage(req, res) {
   let sql = 'SELECT * FROM series;';
   client.query(sql)
     .then(sqlResults => {
-      // console.log(' this is my sqlResults', sqlResults.rows);
       let favorites = sqlResults.rows;
       res.status(200).render('pages/recommendations.ejs', { favoritesArray: favorites });
     }).catch(error => console.log(error))
