@@ -16,7 +16,7 @@
     </div>
     <p class="overviewShow"><%=series.overview%></p>
     <form action='/collection/<%= series.id %>?_method=DELETE' method='POST'>
-      <button class="detailButton">Remove from Collection</button>
+      <button class="detailButton">Remove this show from user recommendations</button>
     </form>
     <h3 class="comment">Comments</h3>
     <% if (series.comments) { %>
