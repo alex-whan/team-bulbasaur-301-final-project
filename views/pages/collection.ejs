@@ -5,18 +5,20 @@
     </header>
     <h1>Your collection</h1>
     <% favoritesArray.forEach(series => { %>
-    <section>
-      <h2><%=series.title%></h2>
-      <p><%=series.overview%></p>
-      <p><%=series.genres%></p>
-      <p><%=series.rating%></p>
-      <p><%=series.year%></p>
-      <p><%=series.available_translations%></p>
-      <img src="<%= series.image_url %>"/>
+      <div class="collectionPage">
+      <h2 class="titleShow"><%=series.title%></h2>
+      <img src="<%= series.image_url %>" class="imgShow"/>
+      <div class="detailShow">
+      <p>Genre: <%=series.genres%></p>
+      <p><%=series.rating%> / 10</p>
+      <p>year: <%=series.year%></p>
+      <p>Available translations: <%=series.available_translations%></p>
+      </div>
+      <p class="overviewShow"><%=series.overview%></p>
       <form action='/collection/<%= series.id %>?_method=DELETE' method='POST'>
       <button class="detailButton">Remove from collection</button> 
       </form>
-    </section>
+    </div>
     <% }) %>
     <footer><%- include ('../partials/footer.ejs') %></footer>
   </body>
