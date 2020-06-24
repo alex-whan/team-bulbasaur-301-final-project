@@ -43,7 +43,8 @@ button:hover{
 }
 
 footer{
-  background: rgb(181, 181, 181);
+  /* background-color: rgb(181, 181, 181); */
+  border-top: solid 2px grey;
   position: fixed;
   bottom: 0;
   left: 0;   
@@ -55,11 +56,15 @@ footer{
   display: flex;
   justify-content: space-around;
   align-items: center;
+  
 }
 
 .footer{
-  background-color: inherit;
   color: black;
+}
+
+footer>*{
+  background-color: rgb(223, 39, 39);
 }
 
 @media screen and (min-width: 760px){
