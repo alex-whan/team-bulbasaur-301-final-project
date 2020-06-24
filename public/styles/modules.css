@@ -45,3 +45,19 @@ h2.aboutUsName{
 .aboutUs:last-of-type{
 	margin-bottom: 200px;
 }
+
+/* #main-logo {
+	height: 100px;
+	width: 100px;
+	text-align: center;
+	margin-right: 10px;
+	align-items: baseline;
+}
+
+#tagline {
+	color: rgb(255, 255, 255);
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 24px;
+  text-align: center;
+  margin-top: 1em ;
+} */
