@@ -169,12 +169,17 @@ a:hover{
 	max-width:226px;
 
 }
-.displayResults> h2,button{
+.displayResults> h2{
 	padding: 13px;
 	display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+
+.displayResults> #button-div {
+	text-align: center;
+	margin-bottom: 5px;
 }
 
 .resultsPage> form {
