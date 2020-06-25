@@ -17,8 +17,12 @@
           <p><span>Available translations:</span> <%=series.available_translations%></p>
         </div>
         <p class="overviewShow"><span>Overview:</span> <%=series.overview%></p>
-        <form action='/collection/<%= series.id %>?_method=DELETE' method='POST'>
-          <button class="detailButton">Remove from My Collection</button> 
+        <div class="divForm">
+          <form action='/collection/<%= series.id %>?_method=DELETE' method='POST'></div>
+            <div class="divButton">
+              <button class="detailButton">Remove from My Collection</button> 
+            </div>
+        
         </form>
       </div>
       <% }) %>
