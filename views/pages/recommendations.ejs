@@ -10,7 +10,7 @@
       <h2 class="titleShow"><%=series.title%></h2>
       <img src="<%= series.image_url %>" />
       <div class="detailShow">
-        <p><span>Genre:</span> <%=series.genres%></p>
+        <p class="cap"><span>Genre:</span> <%=series.genres%></p>
         <p><i style="color: rgb(252, 206, 21);" class="fas fa-star"></i> <%=series.rating%> / 10</p>
         <p><span>Year:</span> <%=series.year%></p>
         <p><span>Platforms:</span><%=series.platforms%></p>
@@ -35,7 +35,7 @@
             </form>
           </div>
           <div>
-            <form action='/collection/<%= series.id %>?_method=DELETE' method='POST'>
+            <form action='/recommendations/<%=series.id%>?_method=DELETE' method='POST'>
               <button class="detailButton">Remove this show from user recommendations</button>
             </form>
           </div>
