@@ -55,6 +55,10 @@ a:hover{
 	color: rgb(148, 146, 146);
 }
 
+.aboutUs:first-of-type{
+	margin-top: 20px;
+}
+
 .aboutUs:last-of-type{
 	margin-bottom: 200px;
 }
@@ -128,7 +132,8 @@ a:hover{
 .resultsPage{
 	/* border: solid 2px grey; */
 	border-radius: 15px;
-	margin: 10%;
+	margin: 0 auto 100px auto;
+	justify-content: center;
 	padding: 2%;
 	display: flex;
 	flex-direction: row;
@@ -168,12 +173,21 @@ a:hover{
 	max-width:226px;
 
 }
-.displayResults> h2,button{
+.displayResults> h2{
 	padding: 13px;
 	display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+
+.displayResults> #button-div {
+	text-align: center;
+	margin-bottom: 5px;
+}
+
+.resultsPage> form {
+	margin-top: 0;
 }
 
 .resultsButton{
@@ -185,7 +199,7 @@ a:hover{
 .collectionPage{
 	border: 2px solid grey;
 	border-radius: 15px;
-	margin: 0 10% 50px 10%;
+	margin: 20px 10% 50px 10%;
 	padding: 5%;
 	display: grid;
 	grid-template-columns: 1fr 1fr;
@@ -204,6 +218,10 @@ a:hover{
 .commentSection{
 	grid-column-start: 1;
   grid-column-end: 3;
+}
+
+.commentSection > form {
+	margin-top: 20px;
 }
 
 [type="hidden"] {
@@ -235,6 +253,9 @@ span{
 
 textarea{
 	place-self: center;
+	resize: none;
+	height: auto;
+	width: 300px;
 }
 
 .inputComment{

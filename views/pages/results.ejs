@@ -3,22 +3,26 @@
   <header>
     <%- include ('../partials/header.ejs') %>
   </header>
-  <h1>Search Results for: "<%=query%>" </h1>
-  <div class="resultsPage">
-  <% shows.forEach(show => { %>
-
-    <form action="/details" method="GET">
-      <div class="displayResults">
-      <img src="https://image.tmdb.org/t/p/w260_and_h390_bestv2<%=show.poster_path%>" class="resultsImg"/>
-    <h2 class="resultsTitle"><%= show.name %></h2>
-    <input type="hidden" value="<%=show.name%>" name="title" />
-    <input type="hidden" value="<%=show.id%>" name="id" />
-    <input type="hidden" value="https://image.tmdb.org/t/p/w260_and_h390_bestv2<%=show.poster_path%>" name="image_url" />
-    <button class="detailButton" class="resultsButton">See Details</button></div>
-  </form>
-
-  <% }) %>
-</div>
+  <!-- <main> -->
+    <h1>Search Results for: "<%=query%>" </h1>
+    <div class="resultsPage">
+      <% shows.forEach(show => { %>
+      <%#if (show.show) { %>
+        <form action="/details" method="GET">
+        <div class="displayResults">
+          <img src="https://image.tmdb.org/t/p/w260_and_h390_bestv2<%=show.poster_path%>" class="resultsImg"/>
+          <h2 class="resultsTitle"><%= show.name %></h2>
+          <input type="hidden" value="<%=show.id%>" name="id" />
+          <input type="hidden" value="https://image.tmdb.org/t/p/w260_and_h390_bestv2<%=show.poster_path%>" name="image_url" />
+          <div id="button-div">
+            <button class="detailButton" class="resultsButton">See Details</button>
+          </div>
+        </div>
+      </form>
+      <%# } %>
+      <% }) %>
+    </div>
+  <!-- </main> -->
   <footer><%- include ('../partials/footer.ejs') %></footer>
 </body>
 </html>

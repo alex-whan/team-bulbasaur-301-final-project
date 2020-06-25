@@ -9,7 +9,9 @@ main{
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  margin: 0 auto;
   margin-bottom: 100px;
+  max-width: 860px;
 }
 
 button{
