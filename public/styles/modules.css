@@ -270,3 +270,86 @@ textarea{
 .cap {
   text-transform: capitalize;
 }
+
+
+
+/* tablet mobile view */
+
+@media screen and (max-width: 700px){
+	main{
+		margin-bottom: 200px;
+	}
+
+	.detailPage{
+		margin: 0 10%;
+		padding: 5%;
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto auto auto auto;
+		row-gap: 2%;
+		/* column-gap: 2%; */
+	}
+	.titleShow{
+		justify-self: center;
+		grid-column-start: 1;
+		grid-column-end: 2;
+	}
+
+	.imgShow{
+		background-image: url(../assets/images/place-holder.jpg);
+		background-size: cover;
+		border: solid 2px white;
+		width: 220px;
+		height: 330px;
+		max-width: 220px;
+		margin: 3% 3% 3% 0;
+		grid-column-start: 1;
+		grid-column-end: 2;
+	}
+
+	.detailShow{
+		grid-column-start: 1;
+		grid-column-end: 2;
+		align-self: center;
+		font-size: 20px;
+	}
+
+	.detailShow>p{
+		padding-bottom: 20px;
+	}
+
+	.overviewShow{
+		grid-column-start: 1;
+		grid-column-end: 2;
+		font-size: 20px;
+	}
+
+	.buttonShow{
+		grid-column-start: 1;
+		grid-column-end: 2;
+		align-self: center;
+	}
+
+	.collectionPage{
+		border: 2px solid grey;
+		border-radius: 15px;
+		margin: 20px 10% 50px 10%;
+		padding: 5%;
+		display: grid;
+		grid-template-columns: 1fr;
+		/* grid-template-rows: auto auto auto auto; */
+		row-gap: 2%;
+		justify-items: center;
+
+		/* column-gap: 2%; */
+	}
+
+	.comment {
+		grid-column-start: 1;
+		grid-column-end: 2;
+	}
+	.commentSection{
+		grid-column-start: 1;
+		grid-column-end: 2;
+	}
+}
