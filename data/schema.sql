@@ -8,10 +8,12 @@ CREATE TABLE series (
   genres TEXT,
   rating VARCHAR(255),
   year VARCHAR(255),
-  tmdbId NUMERIC,
+  tmdbId VARCHAR(255),
   available_translations TEXT,
   comments TEXT,
   usernames TEXT,
-  platforms TEXT
+  platforms TEXT,
+  runtime VARCHAR(255),
+  traktid VARCHAR(255)
 );
 
