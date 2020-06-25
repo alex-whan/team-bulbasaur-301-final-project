@@ -22,22 +22,24 @@
           <% if (series.comments) { %>
             <% series.comments.split(' ,,,,,,,, ').forEach((comment, index) => { %>
               <div class="commentBox">
-                <p><i style="color: #4B95F5;" class="fas fa-user-circle"></i> <%=series.usernames.split(' ,,,,,,,, ')[index]%></p>
-                <p><%=comment%></p>
+              <p><i style="color: #4B95F5;" class="fas fa-user-circle"></i> <%=series.usernames.split(' ,,,,,,,, ')[index]%></p>
+              <p><%=comment%></p>
               </div>
             <% }) %>
             <% } %>
-          <form action="/comment?_method=PUT" method="POST">
-            <input type="hidden" value="<%=series.id%>" name="id" />
-            <input type="text" name="usernames" required placeholder="Enter your name here" class="inputComment" />
-            <textarea required rows="4" cols="48" name="comments" placeholder="Enter your comments here" /></textarea>
-            <button>Post Comment</button>
-          </form>
-        </div>
-        <form action='/collection/<%= series.id %>?_method=DELETE' method='POST'>
-          <button class="detailButton">Remove this show from user recommendations</button>
-        </form>
-      </div>
+            <form action="/comment?_method=PUT" method="POST">
+              <input type="hidden" value="<%=series.id%>" name="id" />
+              <input type="text" name="usernames" required placeholder="Enter your name here" class="inputComment" />
+              <textarea required rows="4" cols="48" name="comments" placeholder="Enter your comments here" /></textarea>
+              <button>Post Comment</button>
+            </form>
+          </div>
+          <div>
+            <form action='/collection/<%= series.id %>?_method=DELETE' method='POST'>
+              <button class="detailButton">Remove this show from user recommendations</button>
+            </form>
+          </div>
+    </div>
     <% }) %>
   </main>
   <footer><%- include ('../partials/footer.ejs') %></footer>
