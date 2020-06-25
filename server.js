@@ -69,6 +69,9 @@ app.get('/collection/:id', showDetails);
 // Delete show from collection route
 app.delete('/collection/:id', deleteShowFromCollection);
 
+//Delete show from recommendations
+app.delete('/recommendations/:id', deleteShowFromRecommendations);
+
 // recommendation page
 app.get('/recommendations', recommendationPage)
 
@@ -219,6 +222,7 @@ function collectionPage(req, res) {
 // Delete show from collection handler
 function deleteShowFromCollection(req, res) {
   let showId = req.params.id;
+  console.log(req.params)
 
   let sql = 'DELETE FROM series WHERE id=$1;';
   let safeVales = [showId];
@@ -229,18 +233,22 @@ function deleteShowFromCollection(req, res) {
     }).catch(error => console.log(error));
 }
 
+function deleteShowFromRecommendations(req, res) {
+  let showId = req.params.id;
+  console.log(req.params)
 
-//   trakt.episodes.summary({
-//     // loop through all episodes
-//     id: id,
-//     id_type: 'imdb',
-//     season: 1,
-//     episode: 5,
-//     extended: 'full'
-//   }).then(response => {
-//     // console.log(response.data);
-//   })
-// }).catch(err => console.log(err))
+  let sql = 'DELETE FROM series WHERE id=$1;';
+  let safeVales = [showId];
+
+  client.query(sql, safeVales)
+    .then(() => {
+      res.status(200).redirect('/recommendations')
+    }).catch(error => console.log(error));
+}
+
+
+
+
 
 
 function recommendationPage(req, res) {
@@ -289,7 +297,7 @@ function Show(obj, img, tmdbId, platforms) {
   this.image_url = img ? img : 'Image not available.';
   this.genres = obj.genres ? obj.genres.join(', ') : 'Genres not available';
   this.rating = obj.rating ? (obj.rating).toFixed(1) : 'Rating not available';
-  this.available_translations = obj.available_translations ? obj.available_translations.join(', ') : 'Genres not available';
+  this.available_translations = obj.available_translations ? obj.available_translations.join(', ').toUpperCase() : 'Translations not available';
   this.year = obj.year ? obj.year : 'Year not available';
   this.tmdbId = tmdbId;
   this.platforms = platforms ? platforms.join(', ') : 'Platforms not available';

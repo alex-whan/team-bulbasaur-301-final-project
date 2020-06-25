@@ -261,3 +261,7 @@ textarea{
 .inputComment{
 	place-self: center;
 }
+
+.cap {
+  text-transform: capitalize;
+}
