@@ -240,6 +240,11 @@ span{
 	color: #4B95F5;
 }
 
+h6 > span{
+	color: #4B95F5;
+	font-size: 26px;
+}
+
 .commentBox{
 	border: solid 1px rgb(79, 77, 77);
 	border-radius: 5px;
