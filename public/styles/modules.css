@@ -24,6 +24,7 @@
 
 .aboutUs:last-of-type{
 	border-bottom: solid 2px grey;
+	padding-bottom: 30px;
 }
 
 h2.aboutUsName{
@@ -82,6 +83,7 @@ a:hover{
 	box-shadow: 1px 1px 0 rgb(215, 214, 214);
 	padding: 10px 30px;
 	margin-bottom: 20px;
+	
 }
 
 .detailPage{
@@ -215,6 +217,18 @@ a:hover{
 .collectionPage:last-of-type{
 	margin-bottom: 200px;
 }
+
+.recommendationPage{
+	border-top: 2px solid grey;
+	/* border-radius: 15px; */
+	margin: 20px 10% 50px 10%;
+	padding: 5%;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-template-rows: auto auto auto auto auto;
+	row-gap: 2%;
+	/* column-gap: 2%; */
+}
  
 .comment {
   grid-column-start: 1;
@@ -261,15 +275,27 @@ h6 > span{
 	padding-bottom: 10px;
 }
 
-textarea{
-	place-self: center;
+.textarea{
+	/* place-self: center; */
+	align-self: start;
 	resize: none;
 	height: auto;
 	width: 300px;
+	border-radius: 5px;
+  background-color: rgb(52, 52, 52);
 }
 
 .inputComment{
-	place-self: center;
+	/* place-self: center; */
+	align-self: start;
+	align-items: start;
+	width: 150px;
+  height: 30px;
+  border-radius: 5px;
+  background-color: rgb(52, 52, 52);
+  font-size: 12px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+
 }
 
 .cap {
@@ -282,8 +308,27 @@ textarea{
 }
 
 .divButton{
-	text-align: center;
+	/* display: grid;
+	grid-column-start: 1;
+	grid-column-end: 3; */
+	/* text-align: right; */
 	margin-bottom: 0 !important;
+}
+
+.commentPart{
+	display: grid;
+	grid-column-start: 1;
+	grid-column-end: 2;
+	align-self: start;
+	border: solid 1px #90bbf4;
+	padding: 5px;
+
+	/* margin: auto; */
+}
+
+.postComment{
+	margin: 5px;
+
 }
 
 /* tablet mobile view */
@@ -357,6 +402,20 @@ textarea{
 		/* column-gap: 2%; */
 	}
 
+	.recommendationPage{
+		/* border-top: 2px solid grey; */
+		/* border-radius: 15px; */
+		margin: 20px 10% 0px 10%;
+		padding: 5%;
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: auto auto auto auto auto 150px;
+		row-gap: 2%;
+		justify-items: center;
+
+		/* column-gap: 2%; */
+	}
+
 	.detailButton{
 		/* margin-bottom: 70px; */
 	}
@@ -368,5 +427,21 @@ textarea{
 	.commentSection{
 		grid-column-start: 1;
 		grid-column-end: 2;
+	}
+
+	.commentPart{
+		display: grid;
+		grid-column-start: 1;
+		grid-column-end: 2;
+		align-self: start;
+		border: solid 1px #90bbf4;
+		padding: 5px;
+	
+		/* margin: auto; */
+	}
+	
+	.postComment{
+		margin: 5px;
+	
 	}
 }
