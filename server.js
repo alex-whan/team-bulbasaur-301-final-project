@@ -136,7 +136,7 @@ function showDetails(req, res) {
   //       res.status(200).render('pages/detail.ejs', { show: sqlResults.rows[0] })
   //     }).catch(error => console.log(error));
   // } else {
-  console.log(req.query);
+  // console.log(req.query);
   const title = req.query.title;
   const tmdbId = req.query.id;
   const image_url = req.query.image_url;
@@ -159,11 +159,11 @@ function showDetails(req, res) {
       .then(results => {
         let platforms = results.body.collection.locations
           .map(location => {
-            console.log(location.display_name);
+            // console.log(location.display_name);
             return location.display_name.replace('IVAUS', '');
           });
-        console.log(results.body);
-        console.log(response.data)
+        // console.log(results.body);
+        // console.log('Trakt query:', response.data[0].show)
         let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
         console.log('constructed show', showData);
         res.status(200).render('pages/detail.ejs', { show: showData })
@@ -171,7 +171,7 @@ function showDetails(req, res) {
         let platforms = [];
         if (response) {
           let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
-          console.log('constructed show', showData);
+          // console.log('constructed show', showData);
           res.status(200).render('pages/detail.ejs', { show: showData })
         }
         console.log(err)
@@ -187,6 +187,7 @@ function showDetails(req, res) {
 
 // Add show to collection handler
 function addShowToCollection(req, res) {
+  console.log('req.body', req.body);
   let idCheck = 'SELECT * FROM series WHERE tmdbId=$1;';
   let idSafeValue = [req.body.tmdbId];
   // console.log('We are in the addShowFunction');
@@ -194,14 +195,18 @@ function addShowToCollection(req, res) {
     .then(idResults => {
       if (!idResults.rowCount) {
         // console.log( 'this is my id Results', idResults.rowCount)
-        let { title, overview, image_url, genres, rating, available_translations, year, tmdbId, platforms } = req.body;
-        let sql = 'INSERT INTO series (title, overview, image_url, genres, rating, available_translations, year, tmdbId, platforms) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING id;';
-        let safeValues = [title, overview, image_url, genres, rating, available_translations, year, tmdbId, platforms];
-
+        let { title, overview, image_url, genres, rating, available_translations, year, tmdbId, platforms, traktId } = req.body;
+        console.log('TRAKT ID', traktId);
+        let sql = 'INSERT INTO series (title, overview, image_url, genres, rating, available_translations, year, tmdbId, platforms, traktid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING traktid;';
+        let safeValues = [title, overview, image_url, genres, rating, available_translations, year, tmdbId, platforms, traktId];
         client.query(sql, safeValues)
           .then((sqlResults) => {
-            // console.log('THIS IS MY SQL RESULTS: ', sqlResults);
-            // let id = sqlResults.rows[0].id;
+            console.log(sqlResults);
+            let idForRuntime = sqlResults.rows[0].traktid;
+            console.log('ID FOR RUNTIME', idForRuntime)
+            getLength(idForRuntime);
+          })
+          .then(() => {
             res.status(200).redirect('/collection');
           }).catch(error => console.log(error))
       }
@@ -300,8 +305,100 @@ function Show(obj, img, tmdbId, platforms) {
   this.available_translations = obj.available_translations ? obj.available_translations.join(', ').toUpperCase() : 'Translations not available';
   this.year = obj.year ? obj.year : 'Year not available';
   this.tmdbId = tmdbId;
+  this.traktId = obj.ids.trakt;
   this.platforms = platforms ? platforms.join(', ') : 'Platforms not available';
+
 }
+
+
+//   trakt.episodes.summary({
+//     // loop through all episodes
+//     id: id,
+//     id_type: 'imdb',
+//     season: 1,
+//     episode: 5,
+//     extended: 'full'
+//   }).then(response => {
+//     // console.log(response.data);
+//   })
+// }).catch(err => console.log(err))
+
+
+function getLength(num) {
+  let runtime = 0;
+  console.log('route works');
+  console.log('tmbd Id PASSED IN', num);
+  trakt.seasons.summary({
+    id: num,
+    type: 'tmdb',
+    extended: 'full'
+  }).then(response => {
+    console.log('THIS IS MY RESPONSE BODY:', response);
+    const episodesPerSeason = response.data.reduce((acc, season) => {
+      if (parseInt(season.number) > 0) {
+        acc.push(season.episode_count);
+        return acc;
+      }
+      return acc;
+    }, []);
+    console.log('EPISODES PER SEASON', episodesPerSeason);
+    // let runtime = 0;
+    episodesPerSeason
+      .forEach((numEpisodes, index) => {
+        for (let i = 1; i < numEpisodes + 1; i++) {
+          trakt.episodes.summary({
+            season: index + 1,
+            episode: i,
+            id: num,
+            type: 'tmdb',
+            extended: 'full'
+          }).then(response => {
+            runtime += response.data.runtime;
+            let sql = 'UPDATE series SET runtime = $1 WHERE traktid = $2 RETURNING runtime;';
+            console.log('trakt id', num)
+            let safeValue = [runtime, num];
+            client.query(sql, safeValue)
+              .then(sqlResults => {
+                console.log(`SQL results`, sqlResults.rows);
+              }).catch(err => console.log(err))
+          }).catch(err => console.log(err))
+        }
+      })
+    // }).then(() => {
+    //   console.log('runtime', runtime)
+    //   let sql = 'UPDATE series SET runtime = $1 WHERE tmdbid = $2 RETURNING runtime;';
+    //   console.log('tmdb id', num)
+    //   let safeValue = [runtime, num];
+    //   client.query(sql, safeValue)
+    //     .then(sqlResults => {
+    //       // console.log(`season ${index + 1} episode ${i}`, sqlResults.rows)
+    //     }).catch(err => console.log(err))
+
+    //   console.log(runtime)
+    // }).catch(err => console.log(err))
+  })
+}
+// })
+// function getSum(episode, season, runtime) {
+//   trakt.episodes.summary({
+//     season: season + 1,
+//     episode: episode,
+//     id: '2302',
+//     extended: 'full'
+//   }).then(response => {
+//     runtime += response.data.runtime;
+//   }).catch(() => {
+//     return runtime;
+//   })
+// }
+
+// console.log(minutesOfSeries);
+// if (index + 1 === episodesPerSeason.length &&
+//   i === numEpisodes) {
+// let seriesLength = Math.floor(minutesOfSeries / 60) + ' hours and ' + minutesOfSeries % 60 + ' minutes';
+// console.log(seriesLength);
+// return minutesOfSeries;
+
 
 // 404 Not Found error handler
 function notFound(req, res) {
