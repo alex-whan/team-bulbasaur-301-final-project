@@ -1,0 +1,15 @@
+<%- include ('../partials/head.ejs') %>
+<body>
+  <header>
+    <%- include ('../partials/header.ejs') %>
+  </header>
+  <main>
+    <div id="noResults">
+      <h2>Sorry, no results for: "<%=query%>"</h2>
+      <br><br>
+      <a href="/search"><button>Search Again</button></a>
+    </div>
+  </main>
+  <footer><%- include ('../partials/footer.ejs') %></footer>
+</body>
+</html>

@@ -1,0 +1,61 @@
+* {
+  font-family: 'Jost', sans-serif;
+  background-color: rgb(29, 27, 27);
+  color: aliceblue;
+}
+
+main{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+  margin-bottom: 100px;
+  min-width: 480px;
+  max-width: 860px;
+}
+
+button{
+  background-color: rgb(133, 133, 133);
+  border-radius: 3px;
+  align-self: center;
+  cursor: pointer;
+  
+}
+
+h1 {
+  color: rgb(255, 255, 255);
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 40px;
+  text-align: center;
+  margin-top: 5%;
+}
+
+h6{
+  font-family: 'Luckiest Guy', cursive;
+  font-size: 26px;
+  text-align: center;
+  margin: 1% 5% 0 5%;
+}
+
+h4{
+  font-family: 'Jost', sans-serif;
+  text-align: center;
+  font-size: 25px;
+  margin: 5% 15%;
+}
+
+h2{
+  font-family: 'Alegreya SC', serif;
+  font-size: 35px;
+}
+
+a{
+  text-decoration: none;
+}
+
+p{
+  font-family: 'Jost', sans-serif;
+}
+
+/* font-family: 'Alegreya SC', serif; */
