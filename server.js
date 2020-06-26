@@ -64,6 +64,7 @@ app.post('/collection', addShowToCollection);
 // collection page route
 app.get('/collection', collectionPage);
 
+// Show details for a book
 app.get('/collection/:id', showDetails);
 
 // Delete show from collection route
@@ -107,36 +108,16 @@ function searchShows(req, res) {
   superagent.get(url, queryParams)
     .then(results => {
       if (results.body.results.length !== 0) {
-        console.log('THESE ARE RESULTS :', results.body.results);
         let responseArray = results.body.results;
         res.status(200).render('pages/results.ejs', { shows: responseArray, query: query });
       } else {
-        console.log('NO RESULTS', results.body.results);
         res.status(200).render('pages/no-results.ejs', { query: query });
       }
     }).catch(err => console.log(err));
 }
 
-
-// Put some logic into show details page saying "if req.params is TRUE, I don't want to do my search, I want to render my detail page using that param id. If not, then I want it to do everything else it was already doing."
-// Similar logic to city explorer to check db for location and save it if you didn't have it yet
-// Similar logic saving a book in Book App
-// Basically, controlling API call while using similar function at same time.
-
 // Show details handler
 function showDetails(req, res) {
-  // if(req.params > 0){
-  //   console.log('OUR REQUEST PARAMS: ', req.params[0]);
-
-  //   let sql = 'SELECT * FROM series WHERE id=$1;';
-  //   let safeValues = [req.params];
-  //   client.query(sql, safeValues)
-  //     .then(sqlResults => {
-  //       console.log('SQL RESULTS :', sqlResults.rows);
-  //       res.status(200).render('pages/detail.ejs', { show: sqlResults.rows[0] })
-  //     }).catch(error => console.log(error));
-  // } else {
-  // console.log(req.query);
   const title = req.query.title;
   const tmdbId = req.query.id;
   const image_url = req.query.image_url;
@@ -159,56 +140,49 @@ function showDetails(req, res) {
       .then(results => {
         let platforms = results.body.collection.locations
           .map(location => {
-            // console.log(location.display_name);
             return location.display_name.replace('IVAUS', '');
           });
-        // console.log(results.body);
-        // console.log('Trakt query:', response.data[0].show)
         let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
-        console.log('constructed show', showData);
         res.status(200).render('pages/detail.ejs', { show: showData })
-      }).catch(err => {
+      }).catch(() => {
         let platforms = [];
-        if (response) {
+        if (response.data[0]) {
           let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
-          // console.log('constructed show', showData);
+          res.status(200).render('pages/detail.ejs', { show: showData })
+        } else {
+          let platforms = [];
+          let constructorObj = { title: title, ids: {}};
+          let showData = new Show(constructorObj, image_url, tmdbId, platforms);
           res.status(200).render('pages/detail.ejs', { show: showData })
         }
-        console.log(err)
       }).catch(err => {
         console.log(err);
-        let platforms = [];
-        let showData = new Show({ title: title }, image_url, tmdbId, platforms);
-        res.status(200).render('pages/detail.ejs', { show: showData })
       })
   }).catch(err => console.log(err))
 }
 
-
 // Add show to collection handler
 function addShowToCollection(req, res) {
-  console.log('req.body', req.body);
   let idCheck = 'SELECT * FROM series WHERE tmdbId=$1;';
   let idSafeValue = [req.body.tmdbId];
-  // console.log('We are in the addShowFunction');
   client.query(idCheck, idSafeValue)
     .then(idResults => {
-      if (!idResults.rowCount) {
-        // console.log( 'this is my id Results', idResults.rowCount)
+      if (idResults.rowCount < 1) {
         let { title, overview, image_url, genres, rating, available_translations, year, tmdbId, platforms, traktId } = req.body;
-        console.log('TRAKT ID', traktId);
         let sql = 'INSERT INTO series (title, overview, image_url, genres, rating, available_translations, year, tmdbId, platforms, traktid) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING traktid;';
         let safeValues = [title, overview, image_url, genres, rating, available_translations, year, tmdbId, platforms, traktId];
         client.query(sql, safeValues)
           .then((sqlResults) => {
-            console.log(sqlResults);
             let idForRuntime = sqlResults.rows[0].traktid;
-            console.log('ID FOR RUNTIME', idForRuntime)
-            getLength(idForRuntime);
+            if(idForRuntime) {
+              getLength(idForRuntime);
+            }
           })
           .then(() => {
             res.status(200).redirect('/collection');
           }).catch(error => console.log(error))
+      } else {
+        res.status(200).redirect('/collection');
       }
     }).catch(error => console.log(error))
 }
@@ -218,7 +192,6 @@ function collectionPage(req, res) {
   let sql = 'SELECT * FROM series;';
   client.query(sql)
     .then(sqlResults => {
-      // console.log(' this is my sqlResults', sqlResults.rows);
       let favorites = sqlResults.rows;
       res.status(200).render('pages/collection.ejs', { favoritesArray: favorites });
     }).catch(error => console.log(error))
@@ -227,35 +200,26 @@ function collectionPage(req, res) {
 // Delete show from collection handler
 function deleteShowFromCollection(req, res) {
   let showId = req.params.id;
-  console.log(req.params)
-
   let sql = 'DELETE FROM series WHERE id=$1;';
   let safeVales = [showId];
-
   client.query(sql, safeVales)
     .then(() => {
       res.status(200).redirect('/collection')
     }).catch(error => console.log(error));
 }
 
+// Delete show from recommendations
 function deleteShowFromRecommendations(req, res) {
   let showId = req.params.id;
-  console.log(req.params)
-
   let sql = 'DELETE FROM series WHERE id=$1;';
   let safeVales = [showId];
-
   client.query(sql, safeVales)
     .then(() => {
       res.status(200).redirect('/recommendations')
     }).catch(error => console.log(error));
 }
 
-
-
-
-
-
+// Render recommendation page
 function recommendationPage(req, res) {
   let sql = 'SELECT * FROM series;';
   client.query(sql)
@@ -265,8 +229,8 @@ function recommendationPage(req, res) {
     }).catch(error => console.log(error))
 }
 
+// Save a comment and render recommendation page
 function saveComment(req, res) {
-  console.log(req.body);
   let id = req.body.id;
   let comments = req.body.comments
   let usernames = req.body.usernames
@@ -276,7 +240,6 @@ function saveComment(req, res) {
   while (usernames.includes(',,,,,,,,')) {
     usernames = usernames.split(',,,,,,,,').join(',,,,,,,')
   }
-  console.log('usernames', usernames)
   let sql = 'SELECT * FROM series WHERE id = $1;';
   let safeValue = [id];
   client.query(sql, safeValue)
@@ -284,18 +247,17 @@ function saveComment(req, res) {
       if (results.rows[0].comments) {
         comments = results.rows[0].comments + ' ,,,,,,,, ' + comments;
         usernames = results.rows[0].usernames + ' ,,,,,,,, ' + usernames;
-        console.log(usernames)
       }
       let sql = 'UPDATE series SET comments = $1, usernames = $2 WHERE id = $3 RETURNING usernames;';
       let safeValues = [comments, usernames, id]
       client.query(sql, safeValues)
         .then(sqlResults => {
-          console.log('in second SQL statement', sqlResults.rows[0].usernames)
           res.status(200).redirect('/recommendations');
         }).catch(err => console.log(err));
     })
 }
 
+// TV show constructor
 function Show(obj, img, tmdbId, platforms) {
   this.title = obj.title ? obj.title : 'No title available.';
   this.overview = obj.overview ? obj.overview : 'No overview available.';
@@ -305,35 +267,19 @@ function Show(obj, img, tmdbId, platforms) {
   this.available_translations = obj.available_translations ? obj.available_translations.join(', ').toUpperCase() : 'Translations not available';
   this.year = obj.year ? obj.year : 'Year not available';
   this.tmdbId = tmdbId;
-  this.traktId = obj.ids.trakt;
+  this.traktId = obj.ids.trakt ? obj.ids.trakt : '';
   this.platforms = platforms ? platforms.join(', ') : 'Platforms not available';
 
 }
 
-
-//   trakt.episodes.summary({
-//     // loop through all episodes
-//     id: id,
-//     id_type: 'imdb',
-//     season: 1,
-//     episode: 5,
-//     extended: 'full'
-//   }).then(response => {
-//     // console.log(response.data);
-//   })
-// }).catch(err => console.log(err))
-
-
+// Gets the length of a TV series
 function getLength(num) {
   let runtime = 0;
-  console.log('route works');
-  console.log('tmbd Id PASSED IN', num);
   trakt.seasons.summary({
     id: num,
     type: 'tmdb',
     extended: 'full'
   }).then(response => {
-    console.log('THIS IS MY RESPONSE BODY:', response);
     const episodesPerSeason = response.data.reduce((acc, season) => {
       if (parseInt(season.number) > 0) {
         acc.push(season.episode_count);
@@ -341,8 +287,6 @@ function getLength(num) {
       }
       return acc;
     }, []);
-    console.log('EPISODES PER SEASON', episodesPerSeason);
-    // let runtime = 0;
     episodesPerSeason
       .forEach((numEpisodes, index) => {
         for (let i = 1; i < numEpisodes + 1; i++) {
@@ -355,50 +299,15 @@ function getLength(num) {
           }).then(response => {
             runtime += response.data.runtime;
             let sql = 'UPDATE series SET runtime = $1 WHERE traktid = $2 RETURNING runtime;';
-            console.log('trakt id', num)
             let safeValue = [runtime, num];
             client.query(sql, safeValue)
               .then(sqlResults => {
-                console.log(`SQL results`, sqlResults.rows);
               }).catch(err => console.log(err))
           }).catch(err => console.log(err))
         }
       })
-    // }).then(() => {
-    //   console.log('runtime', runtime)
-    //   let sql = 'UPDATE series SET runtime = $1 WHERE tmdbid = $2 RETURNING runtime;';
-    //   console.log('tmdb id', num)
-    //   let safeValue = [runtime, num];
-    //   client.query(sql, safeValue)
-    //     .then(sqlResults => {
-    //       // console.log(`season ${index + 1} episode ${i}`, sqlResults.rows)
-    //     }).catch(err => console.log(err))
-
-    //   console.log(runtime)
-    // }).catch(err => console.log(err))
   })
 }
-// })
-// function getSum(episode, season, runtime) {
-//   trakt.episodes.summary({
-//     season: season + 1,
-//     episode: episode,
-//     id: '2302',
-//     extended: 'full'
-//   }).then(response => {
-//     runtime += response.data.runtime;
-//   }).catch(() => {
-//     return runtime;
-//   })
-// }
-
-// console.log(minutesOfSeries);
-// if (index + 1 === episodesPerSeason.length &&
-//   i === numEpisodes) {
-// let seriesLength = Math.floor(minutesOfSeries / 60) + ' hours and ' + minutesOfSeries % 60 + ' minutes';
-// console.log(seriesLength);
-// return minutesOfSeries;
-
 
 // 404 Not Found error handler
 function notFound(req, res) {
