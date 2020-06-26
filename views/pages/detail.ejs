@@ -11,7 +11,9 @@
         <p class="cap"><span>Genre:</span> <%=show.genres%></p>
         <p><i style="color: rgb(252, 206, 21);" class="fas fa-star"></i> <%=show.rating%> / 10</p>
         <p><span>Year:</span> <%=show.year%></p>
-        <p><span>Platforms:</span> <%= show.platforms%></p>
+        <% if (show.platforms) { %>
+          <p><span>Platforms: </span><%=show.platforms%></p>
+          <% } %>
         <p><span>Available translations:</span> <%=show.available_translations%></p>
       </div>
       <p class="overviewShow"><span>Overview:</span> <%=show.overview%></p>
@@ -24,6 +26,7 @@
         <input type="hidden" value="<%=show.available_translations%>" name="available_translations" />
         <input type="hidden" value="<%=show.image_url%>" name="image_url" />
         <input type="hidden" value="<%=show.tmdbId%>" name="tmdbId" />
+        <input type="hidden" value="<%=show.traktId%>" name="traktId" />
         <input type="hidden" value="<%=show.platforms%>" name="platforms" />
         <section class="buttonShow">
         <button id="addButton" class="detailButton">Add to Collection</button>
