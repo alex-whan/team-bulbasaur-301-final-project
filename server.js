@@ -1,4 +1,5 @@
 'use strict';
+/*jslint node: true*/
 
 // Libraries and Dependencies
 const express = require('express');
@@ -180,11 +181,11 @@ function addShowToCollection(req, res) {
           })
           .then(() => {
             res.status(200).redirect('/collection');
-          }).catch(error => console.log(error))
+          }).catch(error => console.log(error));
       } else {
         res.status(200).redirect('/collection');
       }
-    }).catch(error => console.log(error))
+    }).catch(error => console.log(error));
 }
 
 // Collection Page
@@ -194,7 +195,7 @@ function collectionPage(req, res) {
     .then(sqlResults => {
       let favorites = sqlResults.rows;
       res.status(200).render('pages/collection.ejs', { favoritesArray: favorites });
-    }).catch(error => console.log(error))
+    }).catch(error => console.log(error));
 }
 
 // Delete show from collection handler
@@ -204,7 +205,7 @@ function deleteShowFromCollection(req, res) {
   let safeVales = [showId];
   client.query(sql, safeVales)
     .then(() => {
-      res.status(200).redirect('/collection')
+      res.status(200).redirect('/collection');
     }).catch(error => console.log(error));
 }
 
@@ -215,7 +216,7 @@ function deleteShowFromRecommendations(req, res) {
   let safeVales = [showId];
   client.query(sql, safeVales)
     .then(() => {
-      res.status(200).redirect('/recommendations')
+      res.status(200).redirect('/recommendations');
     }).catch(error => console.log(error));
 }
 
@@ -226,19 +227,19 @@ function recommendationPage(req, res) {
     .then(sqlResults => {
       let favorites = sqlResults.rows;
       res.status(200).render('pages/recommendations.ejs', { favoritesArray: favorites });
-    }).catch(error => console.log(error))
+    }).catch(error => console.log(error));
 }
 
 // Save a comment and render recommendation page
 function saveComment(req, res) {
   let id = req.body.id;
-  let comments = req.body.comments
-  let usernames = req.body.usernames
+  let comments = req.body.comments;
+  let usernames = req.body.usernames;
   while (comments.includes(',,,,,,,,')) {
-    comments = comments.split(',,,,,,,,').join(',,,,,,,')
+    comments = comments.split(',,,,,,,,').join(',,,,,,,');
   }
   while (usernames.includes(',,,,,,,,')) {
-    usernames = usernames.split(',,,,,,,,').join(',,,,,,,')
+    usernames = usernames.split(',,,,,,,,').join(',,,,,,,');
   }
   let sql = 'SELECT * FROM series WHERE id = $1;';
   let safeValue = [id];
@@ -249,12 +250,12 @@ function saveComment(req, res) {
         usernames = results.rows[0].usernames + ' ,,,,,,,, ' + usernames;
       }
       let sql = 'UPDATE series SET comments = $1, usernames = $2 WHERE id = $3 RETURNING usernames;';
-      let safeValues = [comments, usernames, id]
+      let safeValues = [comments, usernames, id];
       client.query(sql, safeValues)
         .then(sqlResults => {
           res.status(200).redirect('/recommendations');
         }).catch(err => console.log(err));
-    })
+    });
 }
 
 // TV show constructor
@@ -296,17 +297,17 @@ function getLength(num) {
             id: num,
             type: 'tmdb',
             extended: 'full'
-          }).then(response => {
+          }).then(response => { // jshint ignore: line
             runtime += response.data.runtime;
             let sql = 'UPDATE series SET runtime = $1 WHERE traktid = $2 RETURNING runtime;';
             let safeValue = [runtime, num];
             client.query(sql, safeValue)
-              .then(sqlResults => {
-              }).catch(err => console.log(err))
-          }).catch(err => console.log(err))
+              .then(() => {
+              }).catch(err => console.log(err));
+          }).catch(err => console.log(err)) // jshint ignore: line
         }
-      })
-  })
+      });
+  });
 }
 
 // 404 Not Found error handler

@@ -4,6 +4,7 @@
 ## We take a deep dive into the shows you want!
 
 ![GitHub](https://img.shields.io/github/license/alex-whan/team-bulbasaur-301-final-project)
+[![Build Status](https://travis-ci.com/alex-whan/team-bulbasaur-301-final-project.svg?branch=development)](https://travis-ci.com/alex-whan/team-bulbasaur-301-final-project)
 
 **Authors:**
 
@@ -53,16 +54,16 @@ You'll need to request several **API Keys** in order to run this application loc
 
 Please visit the following sites, register if needed, and follow site instructions for requesting API keys from each one. Please note that it could take some time for the keys to be sent to you after registering.
 
-* ![The Movie Database API (TMDb)](https://developers.themoviedb.org/3/getting-started/introduction)
+* [The Movie Database API (TMDb)](https://developers.themoviedb.org/3/getting-started/introduction)
   - Click the link titled *"API link"* to register for your API key.
 
-* ![Trakt.TV API](https://trakt.docs.apiary.io/#introduction/create-an-app)
+* [Trakt.TV API](https://trakt.docs.apiary.io/#introduction/create-an-app)
   - Scroll down to the *"Create an App"* section and follow the first link there.
   - Do not worry about your API's name, icon, description, redirect URL, or JavaScript origins. You can simply use whichever filler information you wish.
   - Note: You will need **both** the *"Client ID"* and *"Client Secret* keys in this application.
-  - ![This link](https://koditips.com/create-trakt-api-key-kodi-addon/) provides excellent instructions in case you get stuck.
+  - [This link](https://koditips.com/create-trakt-api-key-kodi-addon/) provides excellent instructions in case you get stuck.
 
-* ![uTelly RapidAPI](https://rapidapi.com/utelly/api/utelly)
+* [uTelly RapidAPI](https://rapidapi.com/utelly/api/utelly)
   - On the linked page, navigate to the *"Pricing"* tab near the top. Don't worry - you won't have to pay for this service.
   - On the *"Pricing"* page, click *"Select Plan"* for the *"Basic"* option, and proceed with registration to receive your API key.
 
