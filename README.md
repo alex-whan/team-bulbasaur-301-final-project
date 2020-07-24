@@ -1,5 +1,3 @@
-# Code Fellows - Code 301 Final Project - Team Bulbasaur
-
 # Scuba TV
 ## We take a deep dive into the shows you want!
 
@@ -7,8 +5,9 @@
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/alex-whan/team-bulbasaur-301-final-project)
 [![Build Status](https://travis-ci.com/alex-whan/team-bulbasaur-301-final-project.svg?branch=development)](https://travis-ci.com/alex-whan/team-bulbasaur-301-final-project)
 
-**Authors:**
 
+## Authors
+#### Code Fellows - Code 301 Final Project - Team Bulbasaur
 * Lulu Sevignon
 * Josh Williams
 * Kamit Satkeev
@@ -103,7 +102,7 @@ At this point, you should be able to search for TV shows in Scuba TV's search fe
 
 ## Architecture
 
-The back end of this application is built on an Express server, and uses Superagent for making API calls to the Trakt.tv, RapidAPI/uTelly, and The Movie Database (TMDb) APIs. Postgres stores data in a database, and uses SQL to query stored information from the database to populate the user Collection and Comments to avoid excess API calls. The front end of the application is created using tje EJS (Embedded JavaScript) templating library for views and partials.
+The back end of this application is built on an Express server, and uses Superagent for making API calls to the Trakt.tv, RapidAPI/uTelly, and The Movie Database (TMDb) APIs. Postgres stores data in a database, and uses SQL to query stored information from the database to populate the user Collection and Comments to avoid excess API calls. The front end of the application is created using tje EJS (Embedded JavaScript) templating library for views and partials. Travis.CI is used implement Continuous Integration and testing before deployment.
 
 ### A list of all dependencies required to run this program:
 
