@@ -4,6 +4,7 @@
 ## We take a deep dive into the shows you want!
 
 ![GitHub](https://img.shields.io/github/license/alex-whan/team-bulbasaur-301-final-project)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/alex-whan/team-bulbasaur-301-final-project)
 [![Build Status](https://travis-ci.com/alex-whan/team-bulbasaur-301-final-project.svg?branch=development)](https://travis-ci.com/alex-whan/team-bulbasaur-301-final-project)
 
 **Authors:**

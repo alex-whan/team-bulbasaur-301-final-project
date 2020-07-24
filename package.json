@@ -1,6 +1,6 @@
 {
   "name": "team-bulbasaur-301-final-project",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "description": "Alex Whan, Lulu Sevignon, Kamit Satkeev, Joshua Williams",
   "main": "server.js",
   "devDependencies": {
