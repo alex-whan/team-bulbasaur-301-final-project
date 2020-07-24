@@ -74,10 +74,10 @@ app.delete('/collection/:id', deleteShowFromCollection);
 app.delete('/recommendations/:id', deleteShowFromRecommendations);
 
 // recommendation page
-app.get('/recommendations', recommendationPage)
+app.get('/recommendations', recommendationPage);
 
 // add comments to recommendations
-app.put('/comment', saveComment)
+app.put('/comment', saveComment);
 
 // 404 error route
 app.use('*', notFound);
@@ -104,7 +104,7 @@ function searchShows(req, res) {
   const queryParams = {
     api_key: process.env.TMDB_URL,
     query: query
-  }
+  };
   superagent.get(url, queryParams)
     .then(results => {
       if (results.body.results.length !== 0) {
@@ -143,22 +143,22 @@ function showDetails(req, res) {
             return location.display_name.replace('IVAUS', '');
           });
         let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
-        res.status(200).render('pages/detail.ejs', { show: showData })
+        res.status(200).render('pages/detail.ejs', { show: showData });
       }).catch(() => {
         let platforms = [];
         if (response.data[0]) {
           let showData = new Show(response.data[0].show, image_url, tmdbId, platforms);
-          res.status(200).render('pages/detail.ejs', { show: showData })
+          res.status(200).render('pages/detail.ejs', { show: showData });
         } else {
           let platforms = [];
           let constructorObj = { title: title, ids: {}};
           let showData = new Show(constructorObj, image_url, tmdbId, platforms);
-          res.status(200).render('pages/detail.ejs', { show: showData })
+          res.status(200).render('pages/detail.ejs', { show: showData });
         }
       }).catch(err => {
         console.log(err);
-      })
-  }).catch(err => console.log(err))
+      });
+  }).catch(err => console.log(err));
 }
 
 // Add show to collection handler
